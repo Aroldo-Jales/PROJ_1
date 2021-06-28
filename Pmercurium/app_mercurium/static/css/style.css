@@ -265,6 +265,22 @@ input[type=checkbox] {
     border: 1px solid green;
 }
 
+.pagination {
+    margin-bottom: 50 px;
+    text-align: center;
+}
+
+.step-links {
+    position: relative;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+.step-links .current{
+    margin-left: 5px;
+    margin-right: 5px;
+}
+
 @media (max-width: 1140px) {
     .sidebar {
         width: 8rem;
@@ -282,20 +298,4 @@ input[type=checkbox] {
     .filter {
         width: 5px;
     }
-}
-
-.pagination {
-    margin-bottom: 50 px;
-    text-align: center;
-}
-
-.step-links {
-    position: relative;
-    margin-left: auto;
-    margin-right: auto;
-}
-
-.step-links .current{
-    margin-left: 5px;
-    margin-right: 5px;
 }
