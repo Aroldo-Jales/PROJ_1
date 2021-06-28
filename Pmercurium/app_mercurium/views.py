@@ -4,7 +4,6 @@ from django.contrib.auth.decorators import login_required
 from django.contrib import messages
 from django.db.models import Sum
 from datetime import date
-from django.core.paginator import Paginator
 
 from .models import *
 from .forms import *
@@ -62,13 +61,7 @@ def index(request):
     
     balance = items.aggregate(Sum('value'))
     
-    '''paginação'''
-    paginator = Paginator(items, 4)
-    page = request.GET.get('page')
-    items_list = paginator.get_page(page)
-    
-    data = {'items_list' : items_list, 'balance' : balance, 'gain' : gain, 'to_gain' : to_gain,
-            'expenses' : expenses, 'to_pay' : to_pay, 'current_balance' : current_balance}
+    data = {'items' : items, 'balance' : balance, 'gain' : gain, 'to_gain' : to_gain,'expenses' : expenses, 'to_pay' : to_pay, 'current_balance' : current_balance}
     
     return render(request, 'list_transactions.html', data)
 
@@ -107,13 +100,6 @@ def create(request):
         form = ItemForm()
         form_cat = CategoryForm()
         return render(request, 'create.html', {'form' : ItemForm , 'form_cat' : CategoryForm, 'categories' : categories})
-<<<<<<< HEAD
-def categories(request):
-
-    categories = Category.objects.all()
-    form = CategoryForm()
-    data = {'categories' : categories, 'form' : form}
-=======
 
 def wallets(request):
     
@@ -137,7 +123,6 @@ def categories(request):
     form = CategoryForm()
     data = {'categories' : categories, 'form' : form}
     
->>>>>>> cf4e4c6 (wallet)
     if request.method == 'POST':
         form = CategoryForm(request.POST)
         
@@ -147,11 +132,7 @@ def categories(request):
             return render(request, 'categories.html', data)
     else:
         return render(request, 'categories.html', data)
-<<<<<<< HEAD
         
-=======
-
->>>>>>> cf4e4c6 (wallet)
 def update(request, id):
     item = get_object_or_404(Item, pk=id)
     form = ItemFormEdit(instance=item)
@@ -180,41 +161,15 @@ def delete(request, id):
     return redirect('/')
 
 def delete_cat(request, id):
-<<<<<<< HEAD
-    items = Item.objects.all()
-
-    cat = get_object_or_404(Category, pk=id)
-    delete = None
-
-    name = cat.name
-    item = items.objects.filter(cat__contains=name)
-
-    if len(item) != 0:
-        delete = True
-    else:
-        delete = False
-
-    if delete:
-        cat.delete()
-        form = CategoryForm()
-        data = {'categories' : categories, 'form' : form}
-        message_error(request, 'delete_cat')
-        return render(request, 'categories.html', data)
-
-    else:
-        message_error(request, 'no_delete')
-        return render(request, 'categories.html')
-    
-=======
     cat = get_object_or_404(Category, pk=id)
     
     categories = Category.objects.all()
     form = CategoryForm()
     data = {'categories' : categories, 'form' : form}
 
-    no_delete = cat.is_deletable()
+    not_delete = cat.is_deletable()
     
-    if no_delete:
+    if not_delete:
         message_error(request, 'not_delete')
         return render(request, 'categories.html', data)
     
@@ -223,7 +178,6 @@ def delete_cat(request, id):
         message_error(request, 'delete_cat')
         return render(request, 'categories.html', data)
 
->>>>>>> cf4e4c6 (wallet)
 def trash(request):
     items = Item.objects.filter(status=False)
     data = {'items' : items}
@@ -277,5 +231,6 @@ def message_error(request, invalid_type):
         'date_form': "A data de vencimento é menor que a data inicial",
         'delete_cat': "Categoria removida",
         'not_delete' : "A categoria está ligada a outros registros"
-
+    }
     return messages.error(request, messages_invalid.get(invalid_type))
+
