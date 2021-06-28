@@ -1,21 +1,16 @@
 from django.db import models
 from django.contrib.auth.models import User
 
-<<<<<<< HEAD
-=======
 class Wallet(models.Model):
     name = models.CharField('Nome Carteira', max_length=100)
     def __str__(self):
         return self.name
 
->>>>>>> cf4e4c6 (wallet)
 class Category(models.Model):
     name = models.CharField('Nome categoria', max_length=100)
     def __str__(self):
         return self.name
 
-<<<<<<< HEAD
-=======
     def is_deletable(self):
         related_list = []
         for relation in self._meta.get_fields():
@@ -27,7 +22,6 @@ class Category(models.Model):
                 pass
         return related_list
 
->>>>>>> cf4e4c6 (wallet)
 class Item(models.Model):
     
     description = models.CharField('Descrição', max_length=100)
