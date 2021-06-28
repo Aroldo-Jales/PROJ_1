@@ -33,9 +33,9 @@ https://docs.google.com/spreadsheets/d/1Je7bYp-L8wKCYk88NdH_J3TyZtx_o_zRZPCX3yEe
 
 Funcionalidades com regras de negócio:
 
-- Dashboard
+- Dashboard financeiro
 
-- Calculo de juros por registro
+- Cálculo de juros por registro
 
 - Carteira para melhor organização e definição de limites de gastos
 
