@@ -1,0 +1,130 @@
+
+{% load static %}
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mercurium</title>
+    <link rel="stylesheet" type="text/css" href="{% static 'css/trash_style.css' %}">
+    <link rel="stylesheet" type="text/css" href="{% static 'css/style.css' %}">
+    <link rel="preconnect" href="https://fonts.gstatic.com">
+    <link href="https://fonts.googleapis.com/css2?family=Roboto&display=swap" rel="stylesheet">
+</head>
+<body>
+    <div class="sidebar">
+<<<<<<< HEAD
+        <a href="/">Mercurium</a>
+        <br>
+        <a class="active" href="trash.html">Lixeira</a>
+=======
+        <a class="logo" href="/"><img width="75" src="{% static 'img/svg/Logo_Mercurium.svg' %}">
+            <div class="title">Mercurium</div>
+            <div class="sub-title">v 1.0</div>
+        </a>
+        <br>
+        <br>
+        <a href="/trash.html">Lixeira</a>
+>>>>>>> cf4e4c6 (wallet)
+    </div>
+    <div class="content-container">
+        <div class="table-container">
+            <table class="main-table">  
+                <thead>
+                    <tr>
+                        <th>Descrição</th>
+                        <th>Tipo</th>
+                        <th>Valor</th>
+                        <th>Categoria</th>
+                        <th>Data</th>
+                        <th>Vencimento</th>
+                        <th>Juros</th>
+                        <th>Situação</th>
+                        <th></th>
+                        <th></th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for item in items %}
+                        <tr>
+                            <td>{{item.description}}</td>
+                            <td>{{item.type_item}}</td>
+                            <td>{{item.value}}</td>
+                            <td>{{item.cat}}</td>
+                            {% if item.date == item.date_payment %}
+                            <td>{{item.date}}</td>
+                            <td></td>
+                            <td></td>
+                            {% else %}
+                            <td>{{item.date}}</td>
+                            <td>{{item.date_payment}}</td>
+                            <td>{{item.fees}}%</td>
+                            {% endif %}
+                            {% if item.status_payment == True %}
+                                    <td class="pg">Pago</td> 
+                            {% else %}
+                                {% if item.type_item == 'Receita' %}
+                                    <td class="apg">A receber</td> 
+                                {% else %}
+                                    <td class="apg">A pagar</td>
+                                {% endif %}
+                            {% endif %}
+                            <td>
+                                <button class="btn_recycle">
+                                    <a href="recycle/{{item.id}}" class="tag_recycle">
+                                        <img width="25" src="{% static 'img/svg/recicle.svg' %}">
+                                    </a>
+                            </button>
+                            </td>
+                            <td>
+                                <button class="btn_delete">
+                                    <a href="permanentlydelete/{{item.id}}" class="tag_delete">
+                                        <img width="25" src="{% static 'img/svg/trash-fill.svg' %}">
+                                    </a>
+                            </button>
+                            </td>
+                        </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+        <div class="filter">
+            <div class="container-title-filter">
+                <label class="title-form">Opções de Filtro</label>  
+            </div>
+            <form id="form-filter" method="GET">
+                <fieldset>
+                    <label>Descrição:</label>
+                    <input id="word-key" name="word-key" type="search">
+                </fieldset>
+                <fieldset>
+                    <label>Data Inicial: </label>
+                    <input id="init-date" name="init-date" type="date">
+                    <label>Data Final: </label>
+                    <input id="end-date" name="end-date" type="date">
+                </fieldset>
+                <fieldset>
+                    <label>Valor Inicial</label>
+                    <input id="init-value" name="init-value" type="number">
+                    <label>Valor Final</label>
+                    <input id="end-value" name="end-value" type="number">
+                    <br>    
+                </fieldset>
+                {% if messages %}
+                    {% for message in messages %}
+                    <br>
+                    <label class="alert-messages">{{message}}</label>
+                    <br>
+                    {% endfor %}
+                {% endif %}
+                <br>
+                <button class="btn-filter-date" type="submit">Filtrar</button>
+                <button class="btn-clear-date" type="reset">Limpar</button>
+            </form>
+        </div>
+    </div>
+    <footer>
+    </footer>
+</body>
+</html>

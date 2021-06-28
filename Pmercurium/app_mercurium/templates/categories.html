@@ -1,0 +1,102 @@
+{% load static %}
+
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mercurium</title>
+    <link rel="stylesheet" type="text/css" href="{% static 'css/style.css' %}">
+    <link rel="stylesheet" type="text/css" href="{% static 'css/create_style.css' %}">
+    <link rel="preconnect" href="https://fonts.gstatic.com">
+    <link href="https://fonts.googleapis.com/css2?family=Baloo+Tammudu+2:wght@600&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Roboto&display=swap" rel="stylesheet">
+</head>
+<body>
+    <div class="sidebar">
+        <a class="logo" href="/"><img width="75" src="{% static 'img/svg/Logo_Mercurium.svg' %}">
+            <div class="title">Mercurium</div>
+            <div class="sub-title">v 1.0</div>
+        </a>
+        <br>
+        <a class="active" href="/categories.html">Categorias</a>
+        <a href="#">Gráfico</a>
+        <a href="#">Relatório</a>
+        <br>
+        <a href="/trash.html">Lixeira</a>
+    </div>
+        <div class="content-container">
+            <div class="fields-container">   
+                <div class="form-item">
+                    <form action="" method="POST">
+                        <h2>Adicionar Categoria</h2>
+                        {% csrf_token %}
+                        {{form.as_p}}
+                        {% for message in messages %}
+                        {% if 'safe' in message.tags %}
+                        <div class="messages alert-sucess">
+                            {{message|safe}}
+                            <span onclick="close_message()" class="close-message"><img width="15" src="{% static 'img/svg/close-green.svg' %}"></span>
+                        </div>
+                        {% else %}
+                        <div onclick="close_message()" class="messages alert-danger">
+                            {{message}}
+                            <span onclick="close_message()" class="close-message"><img width="15" src="{% static 'img/svg/close.svg' %}"></span>
+                        </div>
+                        {% endif %}
+                        {% endfor %}
+                        <button type="submit">Inserir</button>
+                    </form>
+                </div>
+<<<<<<< HEAD
+                <div class="search-cat">
+                    <form action="" method="GET">
+                        <!-- <fieldset> -->
+                            <input id="word-key" name="word-key" type="search">
+                            <button type="submit">Pesquisar</button>
+                            <!-- </fieldset> -->
+                        </form>
+                    </div>
+                </div>
+=======
+>>>>>>> cf4e4c6 (wallet)
+            </div>
+        </div>
+        <div class="cat-table-container">
+            <table class="cat-table">
+                <thead>
+                    <tr>
+                        <th>Nome</th>
+                        <th></th>
+                        <th></th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for cat in categories %}
+                    <tr>
+                        <td>{{cat.name}}</td>
+                        <td>
+                            <button class="btn_edit">
+                                <a href="update_cat/{{cat.id}}">
+                                    <img width="25" src="{% static 'img/svg/pencil-square.svg' %}">
+                                </a>
+                            </button>
+                        </td>
+                        <td>                            
+                            <button class="btn_delete">
+                                <a href="delete_cat/{{cat.id}}">
+                                    <img width="25" src="{% static 'img/svg/trash-fill.svg' %}">
+                                </a>
+                            </button>
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+        <script src="{% static 'js/app.js' %}"></script> 
+    <footer>
+    </footer>
+</body>
+</html>

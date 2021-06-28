@@ -1,0 +1,89 @@
+:root {
+    --bm-color:#20397B; /* Azul principal */
+    --bo-color: #00091F; 
+    --bg-color:#CACACA; /* background pages */
+    --sw-color:#999999; /* shadow */
+    --bg-red-btn:#A61022; /* background red button */
+    --bg-red-btn-h:#CF0A2C; /* background red button hover */
+    --bg-blue-btn:#20397B; /* background blue buttom */
+    --bg-blue-btn-h:#0057BE; /* background blue buttom hover */
+    --bo-gray-inp:#CCCCCC; /* border gray input */
+    --bg-alert-mes:#F3CDCF; /* background danger message */
+    --bo-red-mes:#FF0000; /* background red button hover */ /* border color danger message */
+    --co-red-mes: #bd0000; /* color danger message */
+    --bg-gre-mes:#C2DAC2; 
+}
+
+body {
+    margin: 0;
+    padding: 0;
+    height: 100vh;
+    font-family: 'Roboto', sans-serif;
+    background-color: var(--bg-color);
+}
+
+.form-item, .form-category, .search-cat {
+    margin: 5px;
+    background-color: white;
+    padding: 2rem;
+    width: 20rem;
+    border: 1px solid gray;
+    border-radius: 10px;
+    box-shadow: 3px 3px 9px var(--sw-color);
+}
+
+.form-category {
+    height: 12rem;
+}
+
+
+.cat-table {
+    z-index: 1;
+    width: 50rem;
+    text-align: center;
+    overflow: hidden;
+    border-collapse:separate; 
+    border-spacing: 0 0.3rem;
+}
+
+.cat-table th {
+    color: white; 
+    background-color: var(--bm-color);
+    padding: 0.3rem 1rem;
+    font-size: 1rem;
+    font-weight: lighter;
+}
+
+.cat-table tbody td{
+    padding: 0.2rem 1rem;
+    background-color: white;
+}
+
+.cat-table thead tr th:last-child, .cat-table tbody tr td:last-child {
+    border-radius: 0 10px 10px 0;
+}
+
+.cat-table thead tr th:first-child, .cat-table tbody tr td:first-child {
+    border-radius: 10px 0px 0px 10px;
+}
+
+input[type="search"], input[type="text"]{
+    width: 100%;
+}   
+
+.content-container {
+    height: 100%;
+}
+
+.fields-container {
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+    box-shadow: 10px 0px 5px -9px var(--sw-color);
+}
+
+.cat-table-container {
+    position: absolute;
+    left: 40%;
+    top: 0%;
+}

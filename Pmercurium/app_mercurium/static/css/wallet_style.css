@@ -1,0 +1,65 @@
+:root {
+    --bm-color:#20397B; /* Azul principal */
+    --bo-color: #00091F; 
+    --bg-color:#CACACA; /* background pages */
+    --sw-color:#999999; /* shadow */
+    --bg-red-btn:#A61022; /* background red button */
+    --bg-red-btn-h:#CF0A2C; /* background red button hover */
+    --bg-blue-btn:#20397B; /* background blue buttom */
+    --bg-blue-btn-h:#0057BE; /* background blue buttom hover */
+    --bo-gray-inp:#CCCCCC; /* border gray input */
+    --bg-alert-mes:#F3CDCF; /* background danger message */
+    --bo-red-mes:#FF0000; /* background red button hover */ /* border color danger message */
+    --co-red-mes: #bd0000; /* color danger message */
+    --bg-gre-mes:#C2DAC2; 
+}
+
+.wallet-container {
+    margin: 5px;
+    background-color: white;
+    padding: 2rem;
+    width: 20rem;
+    border: 1px solid gray;
+    border-radius: 10px;
+    box-shadow: 3px 3px 9px var(--sw-color);
+    margin-left: 280px;
+    display: flex;
+    flex-direction: column; 
+}
+
+.wallet {
+    margin: 10px;
+    font-size: 1rem;
+    font-weight: bold;
+    padding: 1rem;
+    width: 100%;
+    border-radius: 10px;
+    color: var(--bm-color);
+    background-color: white;
+    border: none;
+    cursor: pointer;
+    line-height: 2  0px;
+    border: 3px solid var(--bm-color);
+    box-shadow: 3px 3px 9px var(--sw-color);
+}
+
+.wallet:hover {
+    transition: 0.2s;
+    color: white;
+    background-color: var(--bm-color);
+}
+
+.add-wallet {
+    margin: 10px;
+    font-size: 1rem;
+    padding: 0.5rem;
+    width: 100%;
+    border-radius: 10px;
+    color: white;
+    background-color: var(--bm-color);
+    border: none;
+    cursor: pointer;
+    line-height: 2  0px;
+    border: 3px solid var(--bm-color);
+    box-shadow: 3px 3px 9px var(--sw-color);
+}

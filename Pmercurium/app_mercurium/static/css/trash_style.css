@@ -1,0 +1,229 @@
+:root {
+    --bm-color:#20397B; /* Azul principal */
+    --bg-color:#CACACA; /* background pages */
+    --sw-color:#999999; /* shadow */
+    --bg-red-btn:#A61022; /* background red button */
+    --bg-red-btn-h:#CF0A2C; /* background red button hover */
+    --bg-blue-btn:#20397B; /* background blue buttom */
+    --bg-blue-btn-h:#0057BE; /* background blue buttom hover */
+    --bo-gray-inp:#CCCCCC; /* border gray input */
+    --bg-alert-mes:#F3CDCF; /* background alert message */
+    --co-red-mes:#FF0000; /* background red button hover */
+}
+
+body {
+    margin: 0;
+    padding: 0;
+    height: 100vh;
+    font-family: 'Roboto', sans-serif;
+    background-color: var(--bg-color);
+}
+
+
+
+/* Barra de menu lateral */
+.sidebar {
+    margin: 0;
+    padding: 0;
+    width: 250px;
+    background-color: white;
+    position: fixed;
+    height: 100%;
+    overflow: auto;
+    box-shadow: 5px 5px 10px var(--sw-color);
+}
+
+.sidebar a:not(.active){
+    display: block;
+    color: black;
+    padding: 20px;
+    text-decoration: none;
+}
+
+.sidebar a:hover:not(.active) {
+    transition:0.3s;
+    background-color: var(--bm-color);
+    color: white;
+}
+
+.active{
+    display: block;
+    padding: 20px;
+    text-decoration: none;
+    background-color: var(--bm-color);
+    color: white;
+}
+
+
+
+/* Container Conteudo */
+.content-container {
+    margin-left: 280px;
+    display: flex;
+    flex-direction: row; 
+}
+
+.container div {
+    flex: 1;
+}
+
+
+
+/* Tabela  */
+.main-table {
+    margin-top: 10px;
+    width: 100%;
+    text-align: center;
+    overflow: hidden;
+    border-collapse:separate; 
+    border-spacing: 0 0.3rem;
+}
+
+.main-table tbody tr {
+    opacity: 0.8;
+}
+
+.main-table tbody tr:hover{
+    transition: 0.2s;
+    opacity: 1;
+}
+
+.main-table thead tr th:last-child, .main-table tbody tr td:last-child {
+    border-radius: 0 10px 10px 0;
+}
+
+.main-table thead tr th:first-child, .main-table tbody tr td:first-child {
+    border-radius: 10px 0px 0px 10px;
+}
+
+.main-table th {
+    color: white; 
+    background-color: var(--bm-color);
+    padding: 0.8rem 1rem;
+    font-size: 1rem;
+    font-weight: lighter;
+}
+
+.main-table tbody td{
+    padding: 0.5rem 1rem;
+    background-color: white;
+}
+
+.table-container {
+    width: 65%;
+}
+
+.btn_edit, .btn_delete {
+    padding:0px;
+    background-color: white;
+    cursor: pointer;
+    /* border: none; */
+}
+
+
+/* Filter Form */
+.container-title-filter {
+    margin-top: 15px;
+    margin-bottom: 15px;
+}
+
+input:focus, button:focus {
+    outline: none;
+}
+
+input {
+    border: 2px solid var(--bo-gray-inp); 
+}
+
+fieldset {
+    display: flex;
+    flex-direction: column; 
+    border: none;
+    background-color: white;
+    border-radius: 5px;
+    box-shadow: 5px 5px 10px var(--sw-color);
+    margin-bottom: 5px;
+}
+
+.title-form {
+    color: white; 
+    background-color: var(--bm-color);
+    padding: 0.8rem 3.5rem;
+    border-radius: 10px;
+    font-size: 1rem;
+    font-weight: lighter;
+}
+
+.filter {
+    height: 100%;
+    margin-top: 10px;
+    margin-left: 15px;
+    float: right;
+}
+
+input {
+    padding: 5px;
+    border-radius: 5px;
+    margin-bottom: 5px;
+}
+
+button[type=submit] {
+    padding: 10px 20px;
+    margin-top: 5px;
+    background-color: var(--bm-color);
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+button[type=submit]:hover {
+    transition: 0.2s;
+    background-color: var(--bg-blue-btn-h);
+}
+
+button[type=reset] {
+    margin-top: 5px;
+    background-color: var(--bg-red-btn); 
+    color: white;
+    padding: 10px 20px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+button[type=reset]:hover {
+    transition: 0.2s;
+    background-color: var(--bg-red-btn-h); 
+}
+
+.alert-messages {
+    padding: 0.8rem 2rem;
+    border-radius: 5px;
+    background-color: var(--bg-alert-mes);
+    color: var(--co-red-mes); 
+}
+
+.btn_recycle, .btn_delete{
+    border: none;
+    background-color: white;
+}
+
+@media (max-width: 1140px) {
+    .sidebar {
+        width: 8rem;
+    }
+    .content-container {
+        margin-left: 125px;
+    }
+}
+
+@media (max-width: 790px) { 
+
+    .title-form {
+        padding: 0.8rem 2rem;
+    }
+    .filter {
+        width: 5px;
+    }
+}

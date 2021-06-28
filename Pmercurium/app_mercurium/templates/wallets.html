@@ -1,0 +1,34 @@
+{% load static %}
+
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mercurium</title>
+    <link rel="stylesheet" type="text/css" href="{% static 'css/style.css' %}">
+    <link rel="stylesheet" type="text/css" href="{% static 'css/wallet_style.css' %}">
+    <link rel="preconnect" href="https://fonts.gstatic.com">
+    <link href="https://fonts.googleapis.com/css2?family=Baloo+Tammudu+2:wght@600&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Roboto&display=swap" rel="stylesheet">
+</head>
+<body>
+    <div class="sidebar">
+        <a class="logo" href="/"><img width="75" src="{% static 'img/svg/Logo_Mercurium.svg' %}">
+            <div class="title">Mercurium</div>
+            <div class="sub-title">v 1.0</div>
+        </a>
+    </div>
+    <div class="wallet-container">
+        {% for wallet in wallets %}
+            <div>
+                <a href="/"><button class="wallet">{{ wallet.name }}</button></a>
+            </div>
+        {% endfor %}
+        <div>
+            <a href="/"><button class="add-wallet"><img width="30" src="{% static 'img/png/plus-signal.png' %}"></button></a>
+        </div>
+    </div>
+</body>
+</html>

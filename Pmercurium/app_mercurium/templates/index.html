@@ -1,0 +1,207 @@
+{% load static %}
+
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mercurium</title>
+    <link rel="stylesheet" type="text/css" href="{% static 'css/style.css' %}">
+    <link rel="stylesheet" type="text/css" href="{% static 'css/index_style.css' %}">
+    <link rel="preconnect" href="https://fonts.gstatic.com">
+    <link href="https://fonts.googleapis.com/css2?family=Baloo+Tammudu+2:wght@600&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Roboto&display=swap" rel="stylesheet">
+</head>
+<body>
+    <div class="sidebar">
+        <a class="logo" href="/"><img width="75" src="{% static 'img/svg/Logo_Mercurium.svg' %}">
+            <div class="title">Mercurium</div>
+            <div class="sub-title">v 1.0</div>
+        </a>
+        <br>
+        <a href="/categories.html">Categorias</a>
+        <a href="#">Grafico</a>
+        <a href="#">Relatório</a>
+        <br>
+        <a href="/trash.html">Lixeira</a>
+    </div>
+    <div class="dashboard-container">
+            {% if balance.value__sum == NULL %}
+                <div class="box-1">Saldo Atual <br> <h1>R$ 0</h1> </div>
+            {% else %}
+                <div class="box-1">Saldo Atual <br> <h1>R$ {{current_balance.value__sum}}</h1> </div>
+            {% endif %}
+
+            {% if gain.value__sum == NULL %}
+                <div class="box-2">Receita <br> <h1>R$ 0</h1> </div>
+            {% else %}
+                <div class="box-2">Receita <br> <h1>R$ {{gain.value__sum}}</h1> </div>
+            {% endif %}
+            {% if expenses.value__sum == NULL %}
+                <div class="box-3">Despesas <p> <h1>R$ 0</h1> </div>
+            {% else %}
+                <div class="box-3">Despesas <p> <h1>R$ {{expenses.value__sum}}</h1> </div>
+            {% endif %}
+
+            {% if to_gain.value__sum == NULL %}
+                <div class="box-3">A Receber <br> <h1>R$ 0</h1> </div>
+            {% else %}
+                <div class="box-3">A Receber <br> <h1>R$ {{to_gain.value__sum}}</h1> </div>
+            {% endif %}
+        
+            {% if to_pay.value__sum == NULL %}
+                <div class="box-5">A Pagar <br> <h1>R$ 0</h1> </div>
+            {% else %}
+                <div class="box-5">A Pagar <br> <h1>R$ {{to_pay.value__sum}}</h1> </div>
+            {% endif %}
+
+            {% if balance.value__sum == NULL %}
+                <div class="box-6">Saldo Projetado <br> <h1>R$ 0</h1> </div>
+            {% else %}
+                <div class="box-6">Saldo Projetado <br> <h1>R$ {{balance.value__sum}}</h1> </div>
+            {% endif %}
+    </div>
+    <div class="content-container">
+        <div class="table-container">
+            <table class="main-table" id="main-table">
+                <a href="create.html"><button class="modal-form"><img width="30" src="{% static 'img/png/plus-signal.png' %}">Adicionar</button></a>
+                <!-- <button class="modal-form"><img width="30" src="{% static 'img/png/plus-signal.png' %}">Adicionar Categoria</button> -->
+                    {% for message in messages %}
+                        {% if 'safe' in message.tags %}
+                            <div class="messages alert-sucess">
+                                {{message|safe}}
+                                <span onclick="close_message()" class="close-message"><img width="15" src="{% static 'img/svg/close-green.svg' %}"></span>
+                            </div>
+                        {% else %}
+                            <div onclick="close_message()" class="messages alert-danger">
+                                {{message}}
+                                <span onclick="close_message()" class="close-message"><img width="15" src="{% static 'img/svg/close.svg' %}"></span>
+                            </div>
+                        {% endif %}
+                    {% endfor %}
+                <thead>
+                    <tr>
+                        <th>Descrição</th>
+                        <th>Tipo</th>
+                        <th>Valor</th>
+                        <th>Categoria</th>
+                        <th>Data</th>
+                        <th>Vencimento</th>
+                        <th>Juros</th>
+                        <th>Situação</th>
+                        <th></th>
+                        <th></th>
+                        <th></th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for item in items %}
+                        <tr>
+                            <td>{{item.description}}</td>
+                            <td>{{item.type_item}}</td>
+                            <td>{{item.value}}</td>
+                            <td>{{item.cat}}</td>
+                            {% if item.date == item.date_payment %}
+                            <td>{{item.date}}</td>
+                            <td></td>
+                            <td></td>
+                            {% else %}
+                            <td>{{item.date}}</td>
+                            <td>{{item.date_payment}}</td>
+                            <td>{{item.fees}}%</td>
+                            {% endif %}
+                            {% if item.status_payment == True %}
+                                    <td class="pg">Pago</td> 
+                            {% else %}
+                                {% if item.type_item == 'Receita' %}
+                                    <td class="apg">A receber</td> 
+                                {% else %}
+                                    <td class="apg">A pagar</td>
+                                {% endif %}
+                            {% endif %}
+                            <td>
+                            <button class="btn_edit">
+                                <a href="update/{{item.id}}">
+                                    <img width="25" src="{% static 'img/svg/pencil-square.svg' %}">
+                                </a>
+                            </button>
+                            </td>
+                            <td>
+                            <button class="btn_delete">
+                                <a href="delete/{{item.id}}">
+                                    <img width="25" src="{% static 'img/svg/trash-fill.svg' %}">
+                                </a>
+                            </button>
+                            </td>
+                            {% if item.status_payment == False %}
+                            <td>
+                                <button class="btn_pay">
+                                    <a href="pay/{{item.id}}">
+                                        <img width="25" src="{% static 'img/svg/transaction.svg' %}">
+                                    </a>
+                                </button>
+                            </td>
+                            {% else %}
+                            <td></td>
+                            {% endif %}
+                        </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+        <div class="filter">
+            <div class="container-title-filter">
+                <label class="title-form">Opções de Filtro</label>  
+            </div>
+            <form id="form-filter" method="GET" autocomplete="off">
+                <fieldset>
+                    <label>Descrição:</label>
+                    <input id="word-key" name="word-key" type="search">
+                </fieldset>
+                <fieldset>
+                    <label>Data Inicial: </label>
+                    <input id="init-date" name="init-date" type="date">
+                    <label>Data Final: </label>
+                    <input id="end-date" name="end-date" type="date">
+                </fieldset>
+                <fieldset>
+                    <label>Valor Inicial</label>
+                    <input id="init-value" name="init-value" type="number">
+                    <label>Valor Final</label>
+                    <input id="end-value" name="end-value" type="number">
+                    <br>    
+                </fieldset>
+                <br>
+                <div class="btns-flex">
+                    <button onclick="" class="btn-filter" type="submit">Filtrar</button>
+                    <button class="btn-clear" type="reset">Limpar</button>
+                </div>
+            </form>
+
+        </div>
+    </div>
+    <!-- <div class="modal-bg">
+        <div class="modal">
+            <h2>Adicionar</h2> 
+            <form method="POST" autocomplete="off">
+                {% csrf_token %}
+                <p><input name="description" type="text" class="description_input" maxlength="100" required id="id_description" placeholder="Descrição"></p>
+                <p><input name="value" type="number" class="value_input" step="0.01" required id="id_value" placeholder="Valor 00,00"></p>
+                <p><input name="category" type="text" class="category_input" maxlength="50" required id="id_category" placeholder="Categoria"></p>
+                <p><input name="date" type="text" class="date_input" onblur="(this.type='text')" onfocus="(this.type='date')" placeholder="Data" required></p>
+                <div class="btns-flex">
+                    <button class="btn-send-form" type="submit">Confirmar</button>
+                    <button class="btn-reset-form" type="reset">Limpar</button>
+                </div>
+                <span class="modal-close"><img width="30" src="{% static 'img/svg/close.svg' %}"></span>
+            </form>
+        </div>
+    </div> -->
+    <div class="graphic-container">
+    </div>
+    <footer>
+    </footer>
+    <script src="{% static 'js/app.js' %}"></script>
+</body>
+</html>
