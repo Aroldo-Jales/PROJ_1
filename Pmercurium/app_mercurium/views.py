@@ -6,13 +6,8 @@ from django.db.models import Sum
 from datetime import date
 from django.core.paginator import Paginator
 
-<<<<<<< HEAD
-from .models import Item, Category
-from .forms import ItemForm, ItemFormEdit, CategoryForm
-=======
 from .models import *
 from .forms import *
->>>>>>> cf4e4c6 (wallet)
 from .utils import *
 
 def index(request):
@@ -72,13 +67,10 @@ def index(request):
     page = request.GET.get('page')
     items_list = paginator.get_page(page)
     
-    data = {'items_list' : items_list, 'balance' : balance, 'gain' : gain, 'to_gain' : to_gain,'expenses' : expenses, 'to_pay' : to_pay, 'current_balance' : current_balance}
+    data = {'items_list' : items_list, 'balance' : balance, 'gain' : gain, 'to_gain' : to_gain,
+            'expenses' : expenses, 'to_pay' : to_pay, 'current_balance' : current_balance}
     
-<<<<<<< HEAD
-    return render(request, 'index.html', data)
-=======
     return render(request, 'list_transactions.html', data)
->>>>>>> cf4e4c6 (wallet)
 
 def create(request):
     if request.method == 'POST':
@@ -284,10 +276,6 @@ def message_error(request, invalid_type):
         'permanently_delete': "Registro removido permanetimente!",
         'date_form': "A data de vencimento é menor que a data inicial",
         'delete_cat': "Categoria removida",
-<<<<<<< HEAD
-        'no_delete' : "A categoria está ligada a outros registros"
-=======
         'not_delete' : "A categoria está ligada a outros registros"
->>>>>>> cf4e4c6 (wallet)
-    }
+
     return messages.error(request, messages_invalid.get(invalid_type))
