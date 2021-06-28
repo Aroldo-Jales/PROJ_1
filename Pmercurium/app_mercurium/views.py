@@ -4,6 +4,7 @@ from django.contrib.auth.decorators import login_required
 from django.contrib import messages
 from django.db.models import Sum
 from datetime import date
+from django.core.paginator import Paginator
 
 from .models import *
 from .forms import *
@@ -61,7 +62,11 @@ def index(request):
     
     balance = items.aggregate(Sum('value'))
     
-    data = {'items' : items, 'balance' : balance, 'gain' : gain, 'to_gain' : to_gain,'expenses' : expenses, 'to_pay' : to_pay, 'current_balance' : current_balance}
+    paginator = Paginator(items, 4)
+    page = request.GET.get('page')
+    items_list = paginator.get_page(page)
+    
+    data = {'items_list' : items_list, 'balance' : balance, 'gain' : gain, 'to_gain' : to_gain,'expenses' : expenses, 'to_pay' : to_pay, 'current_balance' : current_balance}
     
     return render(request, 'list_transactions.html', data)
 
