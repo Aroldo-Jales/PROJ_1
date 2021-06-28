@@ -116,3 +116,21 @@ button.modal-form:hover {
         width: 5px;
     }
 }
+
+/*paginaçao*/
+
+.pagination {
+    margin-bottom: 50 px;
+    text-align: center;
+}
+
+.step-links {
+    position: relative;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+.step-links .current{
+    margin-left: 5px;
+    margin-right: 5px;
+}
