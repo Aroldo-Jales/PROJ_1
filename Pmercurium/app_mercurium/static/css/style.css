@@ -214,6 +214,23 @@ input[type=checkbox] {
     width: 15px;
     height: 15px;
 }
+
+.pagination {
+    margin-bottom: 50 px;
+    text-align: center;
+}
+
+.step-links {
+    position: relative;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+.step-links .current{
+    margin-left: 5px;
+    margin-right: 5px;
+}
+
 /* select {
     width: 50%;
     padding: 5px;
