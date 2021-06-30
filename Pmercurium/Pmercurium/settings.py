@@ -10,15 +10,10 @@ For the full list of settings and their values, see
 https://docs.djangoproject.com/en/3.1/ref/settings/
 """
 
-<<<<<<< HEAD
-from pathlib import Path
-import os
-
-=======
 from django.conf.locale.pt_BR import formats as br_formats
 from pathlib import Path
 import os
->>>>>>> cf4e4c6 (wallet)
+
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
 
@@ -120,10 +115,7 @@ USE_L10N = True
 
 USE_TZ = True
 
-<<<<<<< HEAD
-=======
 br_formats.DATE_FORMAT = 'd/m/y'
->>>>>>> cf4e4c6 (wallet)
 
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/3.1/howto/static-files/
