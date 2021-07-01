@@ -70,7 +70,7 @@ body {
     display: flex;
     background-color: var(--bm-color);
     border: 3px solid var(--bm-color);
-    width: 66.6%;
+    width: 65%;
     height: 20%;
     margin-left: 15%;
     border-radius: 0px 0px 10px 10px;   
@@ -92,7 +92,8 @@ body {
 
 /* Container Conteudo */
 .content-container {
-    margin-left: 280px;
+    width: 100%;
+    margin-left: 15%;
     display: flex;
     flex-direction: row; 
 }
@@ -100,8 +101,6 @@ body {
 .container div {
     flex: 1;
 }
-
-
 
 /* Tabela  */
 .main-table {
@@ -172,8 +171,8 @@ fieldset {
     border: none;
     background-color: white;
     border-radius: 5px;
-    box-shadow: 5px 5px 10px var(--sw-color);
-    margin-bottom: 5px;
+    /* box-shadow: 5px 5px 10px var(--sw-color); */
+    margin-bottom: 10px;
 }
 
 .title-form {
@@ -303,6 +302,96 @@ input[type=checkbox] {
 .step-links .current{
     margin-left: 5px;
     margin-right: 5px;
+}
+
+/* Modal Form */
+button.modal-form {
+    margin-top: 10px;
+    margin-right: 5px;
+    font-size: 1rem;
+    padding: 0.3rem 1rem;
+    border-radius: 10px;
+    background-color: var(--bm-color);
+    color: white;
+    border: none;
+    cursor: pointer;
+    line-height: 30px;
+    border: 3px solid var(--bm-color);
+    box-shadow: 3px 3px 9px var(--sw-color);
+}
+
+button.modal-form img {
+    margin-right: 5px;
+    float: left;
+}
+
+button.modal-form:hover {
+    color: white;
+    transition: 0.2s;
+    background-color: var(--bg-blue-btn-h);
+}
+
+.btns-flex {
+    display: flex;
+    width: 100%;
+}
+
+.btn-send-form , .btn-reset-form , .btn-filter, .btn-clear{
+    flex: 1;
+}
+
+.modal-bg {
+    position: fixed;
+    top: 0;
+    right: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0,0,0,0.5);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    visibility: hidden;
+    opacity: 0;
+}
+
+.bg-active {
+    transition: 0.5s; 
+    visibility: visible;
+    opacity: 1; 
+}   
+
+.modal {
+    position: relative;
+    margin-bottom: 20%;
+    max-width: 400px;
+    border-radius: 5px;
+    background: #f0f2f5;
+    padding: 2rem;
+}
+
+.modal, input {
+    width: 95%;
+}
+
+.reset-hidden {
+    position: absolute;
+    top:10px;
+    right: 10px;
+}
+
+.modal-close {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    cursor: pointer;
+}
+
+.pg {
+    color: green;
+}
+
+.apg {
+    color: red;
 }
 
 @media (max-width: 1140px) {
