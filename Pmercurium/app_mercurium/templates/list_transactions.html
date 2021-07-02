@@ -128,7 +128,7 @@
                             </button>
                             </td>
                             <td>
-                            <button class="btn_delete">
+                            <button onclick="confirm_action()" class="btn_delete">
                                 <a href="delete/{{item.id}}">
                                     <img width="25" src="{% static 'img/svg/trash-fill.svg' %}">
                                 </a>
@@ -149,56 +149,25 @@
                     {% endfor %}
                 </tbody>
             </table>
+            {% if items_list %}
+            <div class ="pagination">
+                <span class="step-links">
+                    {% if items_list.has_previus %}
+                    <a href="?page={{ items_list.previus_page_number }}"><i> previus </i></a>            
+                    {% endif %}
+                    
+                    <span class="current">
+                        {{ items_list.number}} de {{ items_list.paginator.num_pages}}
+                    </span>
+                    
+                    {% if items_list.has_next %}
+                    <a href="?page={{ items_list.next_page_number }}"><i> next </i></a>            
+                    {% endif %}
+                </span>
+            </div>    
+            {% endif %}
         </div>
-        <!-- <div class="filter">
-            <div class="container-title-filter">
-                <label class="title-form">Opções de Filtro</label>  
-            </div>
-            <form id="form-filter" method="GET" autocomplete="off">
-                <fieldset>
-                    <label>Descrição:</label>
-                    <input id="word-key" name="word-key" type="search">
-                </fieldset>
-                <fieldset>
-                    <label>Data Inicial: </label>
-                    <input id="init-date" name="init-date" type="date">
-                    <label>Data Final: </label>
-                    <input id="end-date" name="end-date" type="date">
-                </fieldset>
-                <fieldset>
-                    <label>Valor Inicial</label>
-                    <input id="init-value" name="init-value" type="number">
-                    <label>Valor Final</label>
-                    <input id="end-value" name="end-value" type="number">
-                    <br>    
-                </fieldset>
-                <br>
-                <div class="btns-flex">
-                    <button onclick="" class="btn-filter" type="submit">Filtrar</button>
-                    <button class="btn-clear" type="reset">Limpar</button>
-                </div>
-            </form>
-        </div> -->
     </div>   
-
-    {% if items_list %}
-    <div class ="pagination">
-        <span class="step-links">
-            {% if items_list.has_previus %}
-            <a href="?page={{ items_list.previus_page_number}}"><i> previus </i></a>            
-            {% endif %}
-            
-            <span class="current">
-                {{ items_list.number}} de {{ items_list.paginator.num_pages}}
-            </span>
-            
-            {% if items_list.has_next %}
-            <a href="?page={{ items_list.next_page_number}}"><i> next </i></a>            
-            {% endif %}
-        </span>
-    </div>    
-    {% endif %}
-
     <div class="modal-bg">
         <div class="modal">
             <h2>Filtrar por</h2> 
@@ -221,7 +190,7 @@
                     <br>    
                 </fieldset>
                 <div class="btns-flex">
-                    <button class="btn-send-form" type="submit">Confirmar</button>
+                    <button onclick="verify_filter_form()" class="btn-send-form" type="submit">Confirmar</button>
                     <button class="btn-reset-form" type="reset">Limpar</button>
                 </div>
                 <span onclick="close_modal_filter()" class="modal-close"><img width="30" src="{% static 'img/svg/close.svg' %}"></span>
