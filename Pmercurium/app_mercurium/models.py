@@ -35,7 +35,7 @@ class Item(models.Model):
     
     type_item = models.CharField('Tipo', max_length=50, choices=CHOICE_TYPE)
 
-    cat = models.ForeignKey(Category, on_delete=models.CASCADE)
+    cat = models.ForeignKey(Category, on_delete=models.CASCADE, verbose_name="Categoria")
     date = models.DateField('Data')
 
     status_payment = models.BooleanField('Pago', default=True) 
