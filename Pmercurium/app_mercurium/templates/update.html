@@ -8,7 +8,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Mercurium</title>
     <link rel="stylesheet" type="text/css" href="{% static 'css/style.css' %}">
-    <link rel="stylesheet" type="text/css" href="{% static 'css/index_style.css' %}">
+    <link rel="stylesheet" type="text/css" href="{% static 'css/create_style.css' %}">
     <link rel="preconnect" href="https://fonts.gstatic.com">
     <link href="https://fonts.googleapis.com/css2?family=Baloo+Tammudu+2:wght@600&display=swap" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css2?family=Roboto&display=swap" rel="stylesheet">
@@ -27,7 +27,7 @@
         <a href="/trash.html">Lixeira</a>
     </div>
     <div class="content-container">
-        <div class="form-box">
+        <div class="form-item">
             <form action="" method="POST">
                 {% csrf_token %}
                 {{form.as_p}}
