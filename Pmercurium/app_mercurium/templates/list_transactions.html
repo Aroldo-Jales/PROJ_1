@@ -98,7 +98,11 @@
                     {% for item in items_list %}
                         <tr>
                             <td>{{item.description}}</td>
-                            <td>{{item.value}}</td>
+                            {% if item.type_item == 'Receita' %}
+                                <td class="pg">{{item.value}}</td>
+                            {% else %}
+                                <td class="apg">{{item.value}}</td>
+                            {% endif %}
                             <td>{{item.cat}}</td>
                             {% if item.date == item.date_payment %}
                             <td>{{item.date}}</td>
@@ -110,7 +114,7 @@
                             <td>{{item.fees}}%</td>
                             {% endif %}
                             {% if item.status_payment == True %}
-                                    <td class="pg">Pago</td> 
+                                    <td class="pg">Pago</td>    
                             {% else %}
                                 {% if item.type_item == 'Receita' %}
                                     <td class="apg">A receber</td> 
@@ -197,12 +201,13 @@
     </div>
     
     <div class="graphic-container">
+        
     </div>
 
     <footer>
     </footer>
 
     <script src="{% static 'js/app.js' %}"></script>
-    
+
 </body>
 </html>
