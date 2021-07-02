@@ -7,8 +7,8 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Mercurium</title>
-    <link rel="stylesheet" type="text/css" href="{% static 'css/trash_style.css' %}">
     <link rel="stylesheet" type="text/css" href="{% static 'css/style.css' %}">
+    <link rel="stylesheet" type="text/css" href="{% static 'css/trash_style.css' %}">
     <link rel="preconnect" href="https://fonts.gstatic.com">
     <link href="https://fonts.googleapis.com/css2?family=Roboto&display=swap" rel="stylesheet">
 </head>
@@ -66,14 +66,14 @@
                             {% endif %}
                             <td>
                                 <button class="btn_recycle">
-                                    <a href="recycle/{{item.id}}" class="tag_recycle">
+                                    <a href="/recycle/{{item.id}}" class="tag_recycle">
                                         <img width="25" src="{% static 'img/svg/recicle.svg' %}">
                                     </a>
                             </button>
                             </td>
                             <td>
                                 <button class="btn_delete">
-                                    <a href="permanentlydelete/{{item.id}}" class="tag_delete">
+                                    <a href="/permanentlydelete/{{item.id}}" class="tag_delete">
                                         <img width="25" src="{% static 'img/svg/trash-fill.svg' %}">
                                     </a>
                             </button>
