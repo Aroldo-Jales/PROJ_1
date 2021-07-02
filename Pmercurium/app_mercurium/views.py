@@ -52,25 +52,22 @@ def create(request):
             if item.type_item  == 'Despesa' and item.value > 0 or item.type_item  == 'Receita' and item.value < 0:
                 item.value = item.value * (-1)
                 item.original_value = item.value
-                item.save()
-                message_sucess(request, 'save', item.description)
             
                 if item.status_payment == True:
                     item.date_payment = item.date
                     item.fees = 0
-                    item.save()
-                    message_sucess(request, 'save', item.description)
+
             else:
                 if item.status_payment == True:
                     item.date_payment = item.date
                     item.fees = 0
-                    item.save()
-                    message_sucess(request, 'save', item.description)
+
                 else:
                     item.original_value = item.value
-                    item.save()
-                    message_sucess(request, 'save', item.description)
-
+                
+            item.save()
+            message_sucess(request, 'save', item.description)
+            
             return redirect('/')
     else:
         form = ItemForm()
@@ -120,7 +117,7 @@ def update(request, id):
             item = form.save(commit=False)
             item.original_value = item.value
             item.save()
-            messages.success(request, 'Registro Alterado!', extra_tags='safe')
+            message_sucess(request, 'edit', item.description)
 
             return redirect('/')
         else:
@@ -209,7 +206,8 @@ def calc_fee(items):
 def message_sucess(request, sucess_type, name=''):
     messages_sucess = {
         'save': f"Registro {name} salvo!",
-        'recycle' : f"Registro {name} recuperado!"
+        'recycle' : f"Registro {name} recuperado!",
+        'edit' : f"Registro {name} alterado!"
     }
 
     return messages.success(request, messages_sucess.get(sucess_type), extra_tags='safe')
