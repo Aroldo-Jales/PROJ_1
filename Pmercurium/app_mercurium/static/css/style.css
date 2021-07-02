@@ -45,7 +45,7 @@ body {
 
 .sidebar a:not(.active){
     display: block;
-    color: black;
+    color: var(--bo-color);
     padding: 20px;
     text-decoration: none;
 }
@@ -69,8 +69,9 @@ body {
 .dashboard-container {
     display: flex;
     background-color: var(--bm-color);
-    border: 3px solid var(--bm-color);
-    width: 65%;
+    background-size: 50%, 25%, 25%;
+    width: 75%;
+    min-width: 45rem;
     height: 20%;
     margin-left: 15%;
     border-radius: 0px 0px 10px 10px;   
@@ -106,7 +107,7 @@ body {
 .main-table {
     z-index: 1;
     margin-top: 10px;
-    width: 100%;
+    width: 75%;
     text-align: center;
     overflow: hidden;
     border-collapse:separate; 
@@ -144,7 +145,7 @@ body {
 }
 
 .table-container {
-    width: 65%;
+    width: 100%;
 }
 
 .btn_edit, .btn_delete, .btn_pay {
@@ -152,13 +153,6 @@ body {
     background-color: white;
     cursor: pointer;
     border: none;
-}
-
-
-/* Filter Form */
-.container-title-filter {
-    margin-top: 15px;
-    margin-bottom: 15px;
 }
 
 input:focus, button:focus, select:focus {
@@ -173,22 +167,6 @@ fieldset {
     border-radius: 5px;
     /* box-shadow: 5px 5px 10px var(--sw-color); */
     margin-bottom: 10px;
-}
-
-.title-form {
-    color: white; 
-    background-color: var(--bm-color);
-    padding: 0.8rem 3.5rem;
-    border-radius: 10px;
-    font-size: 1rem;
-    font-weight: lighter;
-}
-
-.filter {
-    height: 100%;
-    margin-top: 10px;
-    margin-left: 15px;
-    float: right;
 }
 
 input, select {
@@ -239,27 +217,30 @@ input[type=checkbox] {
 }
 
 .pagination {
-    margin-bottom: 50 px;
+    margin-top: 10px;
+    width: 75%;
     text-align: center;
 }
 
 .step-links {
-    position: relative;
-    margin-left: auto;
-    margin-right: auto;
+    border-radius: 10px;
+    padding: 5px;
+    border: solid 1px var(--bm-color);
+    color:  var(--bo-color);
 }
 
 .step-links .current{
     margin-left: 5px;
     margin-right: 5px;
-}
+} 
 
 /* select {
     width: 50%;
     padding: 5px;
     border-radius: 5px;
     margin-bottom: 5px;
-} */
+}
+*/
 
 .messages {
     margin-top: 14px;
@@ -336,7 +317,8 @@ button.modal-form:hover {
     width: 100%;
 }
 
-.btn-send-form , .btn-reset-form , .btn-filter, .btn-clear{
+.btn-send-form , .btn-reset-form , .btn-filter, .btn-clear {
+    margin: 5px;
     flex: 1;
 }
 
@@ -394,21 +376,26 @@ button.modal-form:hover {
     color: red;
 }
 
-@media (max-width: 1140px) {
-    .sidebar {
-        width: 8rem;
+@media (max-width: 1030px) {
+    h1 {
+        font-size: 20px;
     }
-    .content-container {
-        margin-left: 125px;
+    .main-table thead tr th:nth-child(2), .main-table tbody tr td:nth-child(2) {
+        display: none;
     }
 }
 
-@media (max-width: 790px) { 
-
-    .title-form {
-        padding: 0.8rem 2rem;
+@media (max-width: 790px) {
+    .main-table thead tr th:nth-child(7), .main-table tbody tr td:nth-child(7) {
+        display: none;
     }
-    .filter {
-        width: 5px;
+}
+
+@media (max-width: 360px) { 
+    .sidebar {
+        display: none;
+    }
+    .main-table thead tr th:nth-child(2), .main-table tbody tr td:nth-child(2) {
+        display: none;
     }
 }
