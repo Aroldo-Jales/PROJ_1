@@ -116,6 +116,11 @@ def update(request, id):
         if (form.is_valid()):
             item = form.save(commit=False)
             item.original_value = item.value
+            if item.type_item == 'Receita' and item.value < 0:      # Mudar para um funcão
+                item.value = item.value * (-1)
+            elif item.type_item == 'Despesa' and item.value > 0:
+                item.value = item.value * (-1)
+
             item.save()
             message_sucess(request, 'edit', item.description)
 
