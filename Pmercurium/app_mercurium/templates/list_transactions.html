@@ -83,7 +83,6 @@
                 <thead>
                     <tr>
                         <th>Descrição</th>
-                        <th>Tipo</th>
                         <th>Valor</th>
                         <th>Categoria</th>
                         <th>Data</th>
@@ -99,7 +98,6 @@
                     {% for item in items_list %}
                         <tr>
                             <td>{{item.description}}</td>
-                            <td>{{item.type_item}}</td>
                             <td>{{item.value}}</td>
                             <td>{{item.cat}}</td>
                             {% if item.date == item.date_payment %}
