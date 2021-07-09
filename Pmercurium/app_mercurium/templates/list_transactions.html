@@ -66,6 +66,7 @@
             <table class="main-table" id="main-table">
                 <a href="create.html"><button class="modal-form"><img width="30" src="{% static 'img/png/plus-signal.png' %}">Adicionar</button></a>
                 <a href="#"><button class="modal-form" onclick="modal_filter()"><img width="30" src="{% static 'img/png/filled-filter.png' %}">Opções de Filtro</button></a>
+                <a href="#"><button class="modal-form"><img width="30" src="{% static 'img/png/generic-sorting.png' %}">Opções de Ordenação</button></a>
                 <!-- <button class="modal-form"><img width="30" src="{% static 'img/png/plus-signal.png' %}">Adicionar Categoria</button> -->
                     {% for message in messages %}
                         {% if 'safe' in message.tags %}
