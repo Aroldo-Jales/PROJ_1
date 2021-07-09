@@ -199,9 +199,42 @@
             </form>
         </div>
     </div>
+    <span id="gain">{{gain.value__sum}}</span>
+    <span id="expense">{{expenses.value__sum}}</span>
+    <div class="charts-container">
+        <div class="chart-1">
+            <canvas id="Categories"></canvas>
+            <script type="text/javascript">
+                var ctx = document.getElementById('Categories').getContext('2d');
+                var gain =  document.getElementById('gain').innerText;
+                var expense =  document.getElementById('expense').innerText;
+                console.log(gain)
+                var Categories = new Chart(ctx, {
+                    type: 'pie',
+                    data: {
+                        labels: ['Receita', 'Despesa'],
+                        datasets: [{
+                            data: [gain, expense],
+                            
+                            backgroundColor: [
+                                'rgba(75, 192, 192, 1)',
+                                'rgba(255, 99, 132, 1)',    
     
-    <div class="graphic-container">
-        
+                            ],
+                            borderColor: [
+                                '#20397B'
+                                ],
+                            borderWidth: 3
+                            }]
+                        },
+
+                        options: {
+                            responsive:true,
+                            maintainAspectRatio: false,
+                        }
+                    });
+            </script>
+        </div>
     </div>
 
     <footer>
