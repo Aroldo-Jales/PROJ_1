@@ -2,11 +2,13 @@ from django.db import models
 from django.contrib.auth.models import User
 
 class Wallet(models.Model):
+    id = models.AutoField(primary_key=True)
     name = models.CharField('Nome Carteira', max_length=100)
     def __str__(self):
         return self.name
 
 class Category(models.Model):
+    id = models.AutoField(primary_key=True)
     name = models.CharField('Nome categoria', max_length=100)
     def __str__(self):
         return self.name
@@ -23,7 +25,7 @@ class Category(models.Model):
         return related_list
 
 class Item(models.Model):
-    
+    id = models.AutoField(primary_key=True)
     description = models.CharField('Descrição', max_length=100)
     value = models.DecimalField('Valor', max_digits=8, decimal_places=2)
     original_value = models.DecimalField('Valor original', max_digits=8, decimal_places=2, blank=True)
