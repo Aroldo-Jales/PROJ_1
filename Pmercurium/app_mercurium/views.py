@@ -11,8 +11,10 @@ from .forms import *
 from .utils import *
 
 def index(request):
-
+    category = Category.objects.all()
     items = Item.objects.filter(status=True)
+    items = Item.objects.order_by('date_payment')
+
     calc_fee(items.filter(status_payment=False))
 
     if request.method == 'GET':
@@ -37,7 +39,16 @@ def index(request):
     page = request.GET.get('page')
     items_list = paginator.get_page(page)
     
-    data = {'items_list' : items_list, 'balance' : balance, 'gain' : gain, 'to_gain' : to_gain,'expenses' : expenses, 'to_pay' : to_pay, 'current_balance' : current_balance}
+    data = {
+    'items_list' : items_list, 
+    'balance' : balance, 
+    'gain' : gain, 
+    'to_gain' : to_gain,
+    'expenses' : expenses, 
+    'to_pay' : to_pay, 
+    'current_balance' : current_balance,
+    'category' : category
+    }
     
     return render(request, 'list_transactions.html', data)
 
@@ -216,6 +227,8 @@ def message_sucess(request, sucess_type, name=''):
     }
 
     return messages.success(request, messages_sucess.get(sucess_type), extra_tags='safe')
+
+
 
 def message_error(request, invalid_type, name=''):
     messages_invalid = {
