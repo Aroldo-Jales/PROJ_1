@@ -11,7 +11,8 @@ from .forms import *
 from .utils import *
 
 def index(request):
-    category = Category.objects.all()
+    
+    #category = Category.objects.all()
     items = Item.objects.filter(status=True)
     items = Item.objects.order_by('date_payment')
 
@@ -47,7 +48,7 @@ def index(request):
     'expenses' : expenses, 
     'to_pay' : to_pay, 
     'current_balance' : current_balance,
-    'category' : category
+    #'category' : category
     }
     
     return render(request, 'list_transactions.html', data)
