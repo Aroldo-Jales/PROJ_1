@@ -154,16 +154,16 @@
             {% if items_list %}
             <div class ="pagination">
                 <span class="step-links">
-                    {% if items_list.has_previus %}
-                    <a href="?page={{ items_list.previus_page_number }}"><i> previus </i></a>            
+                    {% if items_list.has_previous %}
+                    <a href="?page={{ items_list.previous_page_number }}"><img src="{% static 'img/png/previous.png' %}"></a>            
                     {% endif %}
                     
                     <span class="current">
-                        {{ items_list.number}} de {{ items_list.paginator.num_pages}}
+                        {{items_list.number}} de {{items_list.paginator.num_pages}}
                     </span>
                     
                     {% if items_list.has_next %}
-                    <a href="?page={{ items_list.next_page_number }}"><i> next </i></a>            
+                    <a href="?page={{ items_list.next_page_number }}"><img src="{% static 'img/png/next.png' %}"></a>            
                     {% endif %}
                 </span>
             </div>    
