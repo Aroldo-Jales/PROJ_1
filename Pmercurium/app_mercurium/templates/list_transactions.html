@@ -11,6 +11,7 @@
     <link rel="preconnect" href="https://fonts.gstatic.com">
     <link href="https://fonts.googleapis.com/css2?family=Baloo+Tammudu+2:wght@600&display=swap" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css2?family=Roboto&display=swap" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@3.4.1/dist/chart.min.js"></script>
 </head>
 <body>
     <div class="sidebar">
@@ -20,45 +21,52 @@
         </a>
         <br>
         <a href="/categories.html">Categorias</a>
-        <a href="/wallets.html">Grafico</a>
         <a href="#">Relatório</a>
         <br>
         <a href="/trash.html">Lixeira</a>
     </div>
     <div class="dashboard-container">
             {% if balance.value__sum == NULL %}
-                <div class="box-1">Saldo Atual <br> <h1>R$ 0</h1> </div>
+                <div class="box 1">Saldo Atual <br> <h1>R$ 0</h1> </div>
             {% else %}
-                <div class="box-1">Saldo Atual <br> <h1>R$ {{current_balance.value__sum}}</h1> </div>
+                {% if current_balance.value__sum > 0 %}
+                <div class="box 1 box-green">Saldo Atual <br> <h1>R$ {{current_balance.value__sum}}</h1> </div>
+                {% else %}
+                <div class="box 1 box-red">Saldo Atual <br> <h1>R$ {{current_balance.value__sum}}</h1> </div>
+                {% endif %}
             {% endif %}
 
             {% if gain.value__sum == NULL %}
-                <div class="box-2">Receita <br> <h1>R$ 0</h1> </div>
+                <div class="box 2">Receita <br> <h1>R$ 0</h1> </div>
             {% else %}
-                <div class="box-2">Receita <br> <h1>R$ {{gain.value__sum}}</h1> </div>
+                <div class="box 2 box-green">Receita <br> <h1>R$ {{gain.value__sum}}</h1> </div>
             {% endif %}
             {% if expenses.value__sum == NULL %}
-                <div class="box-3">Despesas <p> <h1>R$ 0</h1> </div>
+                <div class="box 3">Despesas <p> <h1>R$ 0</h1> </div>
             {% else %}
-                <div class="box-3">Despesas <p> <h1>R$ {{expenses.value__sum}}</h1> </div>
+                <div class="box 3 box-red">Despesas <p> <h1>R$ {{expenses.value__sum}}</h1> </div>
             {% endif %}
 
             {% if to_gain.value__sum == NULL %}
-                <div class="box-3">A Receber <br> <h1>R$ 0</h1> </div>
+                <div class="box 3">A Receber <br> <h1>R$ 0</h1> </div>
             {% else %}
-                <div class="box-3">A Receber <br> <h1>R$ {{to_gain.value__sum}}</h1> </div>
+                <div class="box 3 box-green">A Receber <br> <h1>R$ {{to_gain.value__sum}}</h1> </div>
             {% endif %}
         
             {% if to_pay.value__sum == NULL %}
-                <div class="box-5">A Pagar <br> <h1>R$ 0</h1> </div>
+                <div class="box 5">A Pagar <br> <h1>R$ 0</h1> </div>
             {% else %}
-                <div class="box-5">A Pagar <br> <h1>R$ {{to_pay.value__sum}}</h1> </div>
+                <div class="box 5 box-red">A Pagar <br> <h1>R$ {{to_pay.value__sum}}</h1> </div>
             {% endif %}
 
             {% if balance.value__sum == NULL %}
-                <div class="box-6">Saldo Projetado <br> <h1>R$ 0</h1> </div>
+                <div class="box 6">Saldo Projetado <br> <h1>R$ 0</h1> </div>
             {% else %}
-                <div class="box-6">Saldo Projetado <br> <h1>R$ {{balance.value__sum}}</h1> </div>
+            {% if current_balance.value__sum > 0 %}
+                <div class="box 6 box-green">Saldo Projetado <br> <h1>R$ {{balance.value__sum}}</h1> </div>
+                {% else %}
+                <div class="box 6 box-red">Saldo Projetado <br> <h1>R$ {{balance.value__sum}}</h1> </div>
+                {% endif %}
             {% endif %}
     </div>
     <div class="content-container">
@@ -220,6 +228,7 @@
                             backgroundColor: [
                                 'rgba(75, 192, 192, 1)',
                                 'rgba(255, 99, 132, 1)',    
+    
                             ],
                             borderColor: [
                                 '#20397B'
