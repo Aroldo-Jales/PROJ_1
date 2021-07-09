@@ -124,14 +124,14 @@
                             {% endif %}
                             <td>
                             <button class="btn_edit">
-                                <a href="update/{{item.id}}">
+                                <a href="update/{{item.id}}" title="Editar">
                                     <img width="25" src="{% static 'img/svg/pencil-square.svg' %}">
                                 </a>
                             </button>
                             </td>
                             <td>
                             <button onclick="confirm_action()" class="btn_delete">
-                                <a href="delete/{{item.id}}">
+                                <a href="delete/{{item.id}}" title="Excluir">
                                     <img width="25" src="{% static 'img/svg/trash-fill.svg' %}">
                                 </a>
                             </button>
@@ -219,7 +219,6 @@
                             backgroundColor: [
                                 'rgba(75, 192, 192, 1)',
                                 'rgba(255, 99, 132, 1)',    
-    
                             ],
                             borderColor: [
                                 '#20397B'
