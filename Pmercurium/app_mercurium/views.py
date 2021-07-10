@@ -10,8 +10,25 @@ from .models import *
 from .forms import *
 from .utils import *
 
+def wallets(request):
+    wallets = Wallet.objects.all()
+    data = {'wallets' : wallets}
+
+    if request.method == 'POST':
+        form = WalletForm(request.POST)
+
+        if form.is_valid():
+            wallet = form.save()
+            wallet.save()
+            message_sucess(request, 'save', wallet.name)
+            return render(request, 'wallets.html', data)
+    else:
+        form = WalletForm()
+        return render(request, 'wallets.html', data)
+
 def index(request):
-    category = Category.objects.all()
+    
+    #category = Category.objects.all()
     items = Item.objects.filter(status=True)
     items = Item.objects.order_by('date_payment')
 
@@ -47,7 +64,7 @@ def index(request):
     'expenses' : expenses, 
     'to_pay' : to_pay, 
     'current_balance' : current_balance,
-    'category' : category
+    #'category' : category
     }
     
     return render(request, 'list_transactions.html', data)
@@ -84,22 +101,6 @@ def create(request):
         form = ItemForm()
         form_cat = CategoryForm()
         return render(request, 'create.html', {'form' : ItemForm , 'form_cat' : CategoryForm, 'categories' : categories})
-
-def wallets(request):
-    
-    wallets = Wallet.objects.all()
-    form = WalletForm()
-    data = {'wallets' : wallets, 'form' : form}
-    
-    if request.method == 'POST':
-        form = WalletForm(request.POST)
-
-        if form.is_valid():
-            wallet = form.save()
-            wallet.save()
-            return render(request, 'wallets.html', data)
-    else:
-        return render(request, 'wallets.html', data)
 
 def categories(request):
     
