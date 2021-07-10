@@ -2,8 +2,8 @@ from django.urls import path
 from .views import *
 
 urlpatterns = [
-    path('', index),
-    path('wallets.html', wallets),
+    path('', wallets),
+    path('list_transactions.html', index),
     path('create.html', create),
     path('update/<int:id>', update),
     path('trash.html', trash),
