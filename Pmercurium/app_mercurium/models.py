@@ -1,16 +1,34 @@
 from django.db import models
 from django.contrib.auth.models import User
+from django.utils.text import slugify
 
 class Wallet(models.Model):
     id = models.AutoField(primary_key=True)
-    name = models.CharField('Nome Carteira', max_length=100)
+    name = models.CharField('Nome Carteira', max_length=100)    
+    slug = models.SlugField(max_length=100, unique=True, blank=True)
+    
     def __str__(self):
         return self.name
 
+    def transactions_value(self):
+        items_list = Item.objects.filter(wallet__pk=self.id)
+        items_list = items_list.filter(status=True)
+        total = 0
+        for item in items_list:
+            total += item.value
+            
+        return total
+
+    def transactions(self):
+        items_list = Item.objects.filter(wallet__pk=self.id)
+        items_list = items_list.filter(status=True)
+        return len(items_list)
+
 class Category(models.Model):
     id = models.AutoField(primary_key=True)
-    # project = models.ForeignKey(Project, on_delete=models.CASCADE)
+    wallet = models.ForeignKey(Wallet, on_delete=models.CASCADE)
     name = models.CharField('Nome categoria', max_length=100)
+    
     def __str__(self):
         return self.name
 
@@ -27,7 +45,7 @@ class Category(models.Model):
 
 class Item(models.Model):
     id = models.AutoField(primary_key=True)
-    # project = models.ForeignKey(Project, on_delete=models.CASCADE)
+    wallet = models.ForeignKey(Wallet, on_delete=models.CASCADE)
     description = models.CharField('Descrição', max_length=100)
     value = models.DecimalField('Valor', max_digits=8, decimal_places=2)
     original_value = models.DecimalField('Valor original', max_digits=8, decimal_places=2, blank=True)

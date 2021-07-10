@@ -15,12 +15,11 @@
 }
 
 .wallet-container {
-    margin: 5px;
     background-color: white;
     padding: 2rem;
     width: 20rem;
-    border: 1px solid gray;
-    border-radius: 10px;
+    /* border: 1px solid gray; */
+    border-radius: 0px 0px 10px 10px;
     box-shadow: 3px 3px 9px var(--sw-color);
     margin-left: 280px;
     display: flex;

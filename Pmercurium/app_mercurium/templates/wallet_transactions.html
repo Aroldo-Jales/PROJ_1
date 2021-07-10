@@ -20,7 +20,7 @@
             <div class="sub-title">v 1.0</div>
         </a>
         <br>
-        <a href="/categories.html">Categorias</a>
+        <a href="/categories/{{wallet.id}}">Categorias</a>
         <a href="#">Relatório</a>
         <br>
         <a href="/trash.html">Lixeira</a>
@@ -72,7 +72,7 @@
     <div class="content-container">
         <div class="table-container">
             <table class="main-table" id="main-table">
-                <a href="create.html"><button class="modal-form"><img width="30" src="{% static 'img/png/plus-signal.png' %}">Adicionar</button></a>
+                <a href="/create/{{wallet.id}}"><button class="modal-form"><img width="30" src="{% static 'img/png/plus-signal.png' %}">Adicionar</button></a>
                 <a><button class="modal-form" onclick="modal_filter()"><img width="30" src="{% static 'img/png/filled-filter.png' %}">Opções de Filtro</button></a>
                 <a><button class="modal-form"><img width="30" src="{% static 'img/png/generic-sorting.png' %}">Opções de Ordenação</button></a>
                 <!-- <button class="modal-form"><img width="30" src="{% static 'img/png/plus-signal.png' %}">Adicionar Categoria</button> -->
@@ -133,14 +133,14 @@
                             {% endif %}
                             <td>
                             <button class="btn_edit">
-                                <a href="update/{{item.id}}" title="Editar">
+                                <a href="/update/{{item.id}}" title="Editar">
                                     <img width="25" src="{% static 'img/svg/pencil-square.svg' %}">
                                 </a>
                             </button>
                             </td>
                             <td>
                             <button onclick="confirm_action()" class="btn_delete">
-                                <a href="delete/{{item.id}}" title="Excluir">
+                                <a href="/delete/{{item.id}}" title="Excluir">
                                     <img width="25" src="{% static 'img/svg/trash-fill.svg' %}">
                                 </a>
                             </button>

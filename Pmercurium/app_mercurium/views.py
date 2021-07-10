@@ -23,14 +23,13 @@ def wallets(request):
             message_sucess(request, 'save', wallet.name)
             return render(request, 'wallets.html', data)
     else:
-        form = WalletForm()
         return render(request, 'wallets.html', data)
 
-def index(request):
-    
+def wallet_transactions(request, id):
+    wallet = get_object_or_404(Wallet, pk=id)
+    items = Item.objects.filter(wallet__pk=id)
+    items = items.order_by('date_payment')
     #category = Category.objects.all()
-    items = Item.objects.filter(status=True)
-    items = Item.objects.order_by('date_payment')
 
     calc_fee(items.filter(status_payment=False))
 
@@ -64,17 +63,21 @@ def index(request):
     'expenses' : expenses, 
     'to_pay' : to_pay, 
     'current_balance' : current_balance,
+    'wallet' : wallet
     #'category' : category
     }
     
-    return render(request, 'list_transactions.html', data)
+    return render(request, 'wallet_transactions.html', data)
 
-def create(request):
+def create(request, id):
+    wallet = get_object_or_404(Wallet, pk=id)
+
     if request.method == 'POST':
         form = ItemForm(request.POST)
 
         if form.is_valid():
             item = form.save(commit=False)
+            item.wallet = Wallet.objects.get(pk=id)
             item.original_value = item.value
 
             if item.type_item  == 'Despesa' and item.value > 0 or item.type_item  == 'Receita' and item.value < 0:
@@ -102,22 +105,43 @@ def create(request):
         form_cat = CategoryForm()
         return render(request, 'create.html', {'form' : ItemForm , 'form_cat' : CategoryForm, 'categories' : categories})
 
-def categories(request):
-    
-    categories = Category.objects.all()
+def categories(request, id):
+    wallet = get_object_or_404(Wallet, pk=id)
+    categories = Category.objects.filter(wallet__pk=id)
     form = CategoryForm()
-    data = {'categories' : categories, 'form' : form}
+    data = {'categories' : categories, 'form' : form, 'wallet' : wallet}
     
     if request.method == 'POST':
         form = CategoryForm(request.POST)
         
         if form.is_valid():
-            item = form.save()
+            item = form.save(commit=False)
+            item.wallet = Wallet.objects.get(pk=id)
             item.save()
             return render(request, 'categories.html', data)
     else:
         return render(request, 'categories.html', data)
-        
+
+def delete_cat(request, id):
+    cat = get_object_or_404(Category, pk=id)
+    
+    categories = Category.objects.all()
+    form = CategoryForm()
+    data = {'categories' : categories, 'form' : form}
+
+    related_list = cat.is_deletable()
+    
+    if related_list:
+        message_error(request, 'not_delete', cat.name)
+        for item in related_list:
+            message_error(request, 'related_list')
+        return render(request, 'categories.html', data)
+    
+    else:
+        cat.delete()
+        message_error(request, 'delete_cat')
+        return render(request, 'categories.html', data)
+
 def update(request, id):
     item = get_object_or_404(Item, pk=id)
     form = ItemFormEdit(instance=item)
@@ -149,24 +173,6 @@ def delete(request, id):
     message_error(request,'delete')
     
     return redirect('/')
-
-def delete_cat(request, id):
-    cat = get_object_or_404(Category, pk=id)
-    
-    categories = Category.objects.all()
-    form = CategoryForm()
-    data = {'categories' : categories, 'form' : form}
-
-    related_list = cat.is_deletable()
-    
-    if related_list:
-        message_error(request, 'not_delete', cat.name)
-        return render(request, 'categories.html', data)
-    
-    else:
-        cat.delete()
-        message_error(request, 'delete_cat')
-        return render(request, 'categories.html', data)
 
 def trash(request):
     items = Item.objects.filter(status=False)
@@ -233,6 +239,7 @@ def message_sucess(request, sucess_type, name=''):
 
 def message_error(request, invalid_type, name=''):
     messages_invalid = {
+        'related_list': f"{name}",
         'date-range': "A data inicial é maior que a final!",
         'incomplete-date-1': "Preencha a data inicial!",
         'incomplete-date-2': "Preencha a data final!",

@@ -15,7 +15,7 @@
 </head>
 <body>
     <div class="sidebar">
-        <a class="logo" href="/list_transactions.html"><img width="75" src="{% static 'img/svg/Logo_Mercurium.svg' %}">
+        <a class="logo" href=""><img width="75" src="{% static 'img/svg/Logo_Mercurium.svg' %}">
             <div class="title">Mercurium</div>
             <div class="sub-title">v 1.0</div>
         </a>
@@ -24,7 +24,15 @@
         <h1>Carteiras</h1>
         {% for wallet in wallets %}
             <div>
-                <a href="/"><button class="wallet">{{wallet.name}}</button></a>
+                <a href="wallet_transactions/{{wallet.id}}">
+                    <button class="wallet">
+                        <h2><img class="wallet-icon" width="30" src="{% static 'img/png/wallet-24.png' %}"> {{wallet.name}}</h2> 
+                        <br> 
+                        Total Transações: {{wallet.transactions}}
+                        <br>
+                        Valor: {{wallet.transactions_value}}
+                    </button>
+                </a>
             </div>
         {% endfor %}
         <div>

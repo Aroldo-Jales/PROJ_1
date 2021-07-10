@@ -15,12 +15,12 @@
 </head>
 <body>
     <div class="sidebar">
-        <a class="logo" href="/"><img width="75" src="{% static 'img/svg/Logo_Mercurium.svg' %}">
+        <a class="logo" href="/wallet_transactions/{{wallet.id}}"><img width="75" src="{% static 'img/svg/Logo_Mercurium.svg' %}">
             <div class="title">Mercurium</div>
             <div class="sub-title">v 1.0</div>
         </a>
         <br>
-        <a class="active" href="/categories.html">Categorias</a>
+        <a class="active" href="/categories/{{wallet.id}}">Categorias</a>
         <a href="#">Relatório</a>
         <br>
         <a href="/trash.html">Lixeira</a>

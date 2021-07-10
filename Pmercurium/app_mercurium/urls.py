@@ -3,8 +3,8 @@ from .views import *
 
 urlpatterns = [
     path('', wallets),
-    path('list_transactions.html', index),
-    path('create.html', create),
+    path('wallet_transactions/<int:id>', wallet_transactions),
+    path('create/<int:id>', create),
     path('update/<int:id>', update),
     path('trash.html', trash),
     path('delete/<int:id>', delete),
@@ -12,6 +12,6 @@ urlpatterns = [
     path('recycle/<int:id>', recycle),
     path('pay/<int:id>', pay),
 
-    path('categories.html', categories),
+    path('categories/<int:id>', categories),
     path('delete_cat/<int:id>', delete_cat)
 ]

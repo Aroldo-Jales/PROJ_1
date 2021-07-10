@@ -5,15 +5,21 @@ from .models import Item, Category, Wallet
 class DateInput(forms.DateInput):
     input_type = 'date'
 
+class WalletForm(ModelForm):
+    class Meta:
+        model = Wallet
+        fields = '__all__'
+
 class CategoryForm(ModelForm):
     class Meta:
         model = Category
+        exclude = ['wallet']
         fields = '__all__'
 
 class ItemForm(ModelForm):
     class Meta:
         model = Item
-        exclude = ['status','original_value']
+        exclude = ['wallet','status','original_value']
         widgets = {
             'date': DateInput(),
             'date_payment': DateInput()
