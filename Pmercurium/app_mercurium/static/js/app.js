@@ -1,3 +1,13 @@
+function modal_wallet() {
+    let modal_wallet_bg = document.querySelector('.modal-wallet-bg');
+    modal_wallet_bg.classList.add('bg-active');
+}
+
+function close_modal_wallet() {
+    let modal_bg = document.querySelector('.modal-wallet-bg');
+    modal_bg.classList.remove('bg-active');
+}
+
 function modal_filter() {
     let modal_bg = document.querySelector('.modal-bg');
     modal_bg.classList.add('bg-active');
