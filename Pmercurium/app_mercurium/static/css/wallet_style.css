@@ -63,3 +63,49 @@
     border: 3px solid var(--bm-color);
     box-shadow: 3px 3px 9px var(--sw-color);
 }
+
+.modal-wallet-bg {
+    position: fixed;
+    top: 0;
+    right: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0,0,0,0.5);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    visibility: hidden;
+    opacity: 0;
+}
+
+.bg-active {
+    transition: 0.5s; 
+    visibility: visible;
+    opacity: 1; 
+}   
+
+.modal {
+    position: relative;
+    margin-bottom: 20%;
+    max-width: 400px;
+    border-radius: 5px;
+    background: #f0f2f5;
+    padding: 2rem;
+}
+
+.modal, input {
+    width: 95%;
+}
+
+.reset-hidden {
+    position: absolute;
+    top:10px;
+    right: 10px;
+}
+
+.modal-close {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    cursor: pointer;
+}
