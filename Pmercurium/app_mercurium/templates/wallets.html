@@ -19,13 +19,43 @@
             <div class="title">Mercurium</div>
             <div class="sub-title">v 1.0</div>
         </a>
+        <br>
+        {% if user.is_authenticated %}
+        
+        {% else %}
+        <br>
+            <a href="/accounts/login">Entrar</a>
+        <br>
+        {% endif %}
+
+        {% if user.is_authenticated %}
+        <br>
+            <a href="/accounts/logout">Sair</a>
+        <br>
+        {% endif %}
+        <br>
     </div>
     <div class="wallet-container">
-        <h1>Carteiras</h1>
+        <h1 style="width: 100%">Carteiras</h1>
+        <div style="width: 100%">
+            {% for message in messages %}
+                {% if 'safe' in message.tags %}
+                    <div class="messages alert-sucess">
+                        {{message|safe}}
+                        <span onclick="close_message()" class="close-message"><img width="15" src="{% static 'img/svg/close-green.svg' %}"></span>
+                    </div>
+                {% else %}
+                    <div onclick="close_message()" class="messages alert-danger">
+                        {{message}}
+                        <span onclick="close_message()" class="close-message"><img width="15" src="{% static 'img/svg/close.svg' %}"></span>
+                    </div>
+                {% endif %}
+            {% endfor %}
+        </div>
         {% for wallet in wallets %}
-            <div>
+            <div class="wallet-box">
                 <a href="wallet_transactions/{{wallet.id}}">
-                    <button class="wallet">
+                    <button class="wallet-btn">
                         <h2><img class="wallet-icon" width="30" src="{% static 'img/png/wallet-24.png' %}"> {{wallet.name}}</h2> 
                         <br> 
                         Total Transações: {{wallet.transactions}}
@@ -33,6 +63,13 @@
                         Valor: {{wallet.transactions_value}}
                     </button>
                 </a>
+                <div class="dropdown">
+                    <button class="dropbtn">Opções</button>
+                    <div class="dropdown-content">
+                      <a href="#">Editar</a>
+                      <a href="#">Excluir</a>
+                    </div>
+                </div>
             </div>
         {% endfor %}
         <div>
@@ -44,7 +81,8 @@
             <h2>Criar nova carteira</h2> 
             <form action method="POST" autocomplete="off">
                 {% csrf_token %}
-                    <input id="id-wallet-name" name="name" type="text" placeholder="Nome Carteira">  
+                    <input id="id-wallet-name" name="name" type="text" placeholder="Nome Carteira" required> 
+                    <input id="id-wallet-limit" name="limit" type="number" placeholder="Limite Carteira" required>   
                 <div class="btns-flex">
                     <button onclick="verify_filter_form()" class="btn-send-form" type="submit">Confirmar</button>
                     <button class="btn-reset-form" type="reset">Limpar</button>

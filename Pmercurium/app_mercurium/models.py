@@ -5,7 +5,7 @@ from django.utils.text import slugify
 class Wallet(models.Model):
     id = models.AutoField(primary_key=True)
     name = models.CharField('Nome Carteira', max_length=100)    
-    slug = models.SlugField(max_length=100, unique=True, blank=True)
+    limit = models.DecimalField('Valor', max_digits=8, decimal_places=2)
     
     def __str__(self):
         return self.name
