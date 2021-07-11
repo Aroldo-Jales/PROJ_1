@@ -1,4 +1,5 @@
 from django.shortcuts import render, redirect, get_object_or_404
+from django.core.exceptions import PermissionDenied
 from django.contrib.humanize.templatetags.humanize import intcomma
 from django.contrib.auth.decorators import login_required
 from django.contrib import messages
@@ -10,212 +11,259 @@ from .models import *
 from .forms import *
 from .utils import *
 
+@login_required
 def wallets(request):
-    wallets = Wallet.objects.all()
+    wallets = Wallet.objects.filter(user=request.user)
     data = {'wallets' : wallets}
 
     if request.method == 'POST':
         form = WalletForm(request.POST)
 
         if form.is_valid():
-            wallet = form.save()
+            wallet = form.save(commit=False)
+            wallet.user = request.user
             wallet.save()
             message_sucess(request, 'save', wallet.name)
-            return render(request, 'wallets.html', data)
+            return redirect('/')
     else:
         return render(request, 'wallets.html', data)
 
+@login_required
 def wallet_transactions(request, id):
     wallet = get_object_or_404(Wallet, pk=id)
-    items = Item.objects.filter(wallet__pk=id)
-    items = items.order_by('date_payment')
-    #category = Category.objects.all()
+    if wallet.user == request.user:
+        items = Item.objects.filter(wallet__pk=id, status=True)
+        category = Category.objects.filter(wallet__pk=id)
+        items = items.order_by('date_payment')
 
-    calc_fee(items.filter(status_payment=False))
+        calc_fee(items.filter(status_payment=False))
 
-    if request.method == 'GET':
-        word_key = request.GET.get('word-key')
+        if request.method == 'GET':
+            word_key = request.GET.get('word-key')
 
-        init_date = request.GET.get('init-date')
-        end_date = request.GET.get('end-date')      
+            init_date = request.GET.get('init-date')
+            end_date = request.GET.get('end-date')      
 
-        init_value = request.GET.get('init-value')
-        end_value = request.GET.get('end-value')
+            init_value = request.GET.get('init-value')
+            end_value = request.GET.get('end-value')
 
-        items = filter_items(request, items, word_key, init_date, end_date, init_value, end_value)
-        
-    gain = items.filter(type_item='Receita', status_payment=True).aggregate(Sum('value'))
-    to_gain = items.filter(type_item='Receita', status_payment=False).aggregate(Sum('value'))
-    expenses = items.filter(type_item='Despesa', status_payment=True).aggregate(Sum('value'))
-    to_pay = items.filter(type_item='Despesa', status_payment=False).aggregate(Sum('value'))
-    current_balance = items.filter(status_payment=True).aggregate(Sum('value'))
-    balance = items.aggregate(Sum('value'))
-    
-    paginator = Paginator(items, 8)
-    page = request.GET.get('page')
-    items_list = paginator.get_page(page)
-    
-    data = {
-    'items_list' : items_list, 
-    'balance' : balance, 
-    'gain' : gain, 
-    'to_gain' : to_gain,
-    'expenses' : expenses, 
-    'to_pay' : to_pay, 
-    'current_balance' : current_balance,
-    'wallet' : wallet
-    #'category' : category
-    }
-    
-    return render(request, 'wallet_transactions.html', data)
+            items = filter_items(request, items, word_key, init_date, end_date, init_value, end_value)
+            
+        gain = items.filter(type_item='Receita', status_payment=True).aggregate(Sum('value'))
+        to_gain = items.filter(type_item='Receita', status_payment=False).aggregate(Sum('value'))
+        expenses = items.filter(type_item='Despesa', status_payment=True).aggregate(Sum('value'))
+        to_pay = items.filter(type_item='Despesa', status_payment=False).aggregate(Sum('value'))
+        current_balance = items.filter(status_payment=True).aggregate(Sum('value'))
+        balance = items.aggregate(Sum('value'))
 
+        paginator = Paginator(items, 8)
+        page = request.GET.get('page')
+        items_list = paginator.get_page(page)
+
+        data = {
+        'items_list' : items_list, 
+        'balance' : balance, 
+        'gain' : gain, 
+        'to_gain' : to_gain,
+        'expenses' : expenses, 
+        'to_pay' : to_pay, 
+        'current_balance' : current_balance,
+        'wallet' : wallet,
+        'category' : category
+        }
+
+        return render(request, 'wallet_transactions.html', data)
+    else:
+        raise PermissionDenied()
+
+@login_required
 def create(request, id):
     wallet = get_object_or_404(Wallet, pk=id)
+    if wallet.user == request.user:
+        if request.method == 'POST':
+            form = ItemForm(request.POST)
 
-    if request.method == 'POST':
-        form = ItemForm(request.POST)
-
-        if form.is_valid():
-            item = form.save(commit=False)
-            item.wallet = Wallet.objects.get(pk=id)
-            item.original_value = item.value
-
-            if item.type_item  == 'Despesa' and item.value > 0 or item.type_item  == 'Receita' and item.value < 0:
-                item.value = item.value * (-1)
+            if form.is_valid():
+                item = form.save(commit=False)
+                item.wallet = Wallet.objects.get(pk=id)
                 item.original_value = item.value
-            
-                if item.status_payment == True:
-                    item.date_payment = item.date
-                    item.fees = 0
 
-            else:
-                if item.status_payment == True:
-                    item.date_payment = item.date
-                    item.fees = 0
-
-                else:
+                if item.type_item  == 'Despesa' and item.value > 0 or item.type_item  == 'Receita' and item.value < 0:
+                    item.value = item.value * (-1)
                     item.original_value = item.value
                 
-            item.save()
-            message_sucess(request, 'save', item.description)
-            
-            return redirect('/')
-    else:
-        form = ItemForm()
-        form_cat = CategoryForm()
-        return render(request, 'create.html', {'form' : ItemForm , 'form_cat' : CategoryForm, 'categories' : categories})
+                    if item.status_payment == True:
+                        item.date_payment = item.date
+                        item.fees = 0
 
+                else:
+                    if item.status_payment == True:
+                        item.date_payment = item.date
+                        item.fees = 0
+
+                    else:
+                        item.original_value = item.value
+                    
+                item.save()
+                message_sucess(request, 'save', item.description)
+                
+                return redirect(f'/wallet_transactions/{id}')
+        else:
+            form = ItemForm()
+            form_cat = CategoryForm()
+            return render(request, 'create.html', {'form' : ItemForm, 'wallet' : wallet})
+    else:
+        raise PermissionDenied()
+
+@login_required
 def categories(request, id):
     wallet = get_object_or_404(Wallet, pk=id)
-    categories = Category.objects.filter(wallet__pk=id)
-    form = CategoryForm()
-    data = {'categories' : categories, 'form' : form, 'wallet' : wallet}
-    
-    if request.method == 'POST':
-        form = CategoryForm(request.POST)
+    if wallet.user == request.user:
+        categories = Category.objects.filter(wallet__pk=id)
+        form = CategoryForm()
+        data = {'categories' : categories, 'form' : form, 'wallet' : wallet}
         
-        if form.is_valid():
-            item = form.save(commit=False)
-            item.wallet = Wallet.objects.get(pk=id)
-            item.save()
+        if request.method == 'POST':
+            form = CategoryForm(request.POST)
+            
+            if form.is_valid():
+                item = form.save(commit=False)
+                item.wallet = Wallet.objects.get(pk=id)
+                item.save()
+                return render(request, 'categories.html', data)
+        else:
             return render(request, 'categories.html', data)
     else:
-        return render(request, 'categories.html', data)
+        raise PermissionDenied()
 
+@login_required
 def delete_cat(request, id):
     cat = get_object_or_404(Category, pk=id)
-    
-    categories = Category.objects.all()
-    form = CategoryForm()
-    data = {'categories' : categories, 'form' : form}
+    wallet = cat.wallet
+    if wallet.user == request.user:
 
-    related_list = cat.is_deletable()
-    
-    if related_list:
-        message_error(request, 'not_delete', cat.name)
-        for item in related_list:
-            message_error(request, 'related_list')
-        return render(request, 'categories.html', data)
-    
+        categories = Category.objects.all()
+        form = CategoryForm()
+        data = {'categories' : categories, 'form' : form}
+
+        related_list = cat.is_deletable()
+
+        if related_list:
+            message_error(request, 'not_delete', cat.name)
+            for item in related_list:
+                message_error(request, 'related_list')
+            return render(request, 'categories.html', data)
+
+        else:
+            cat.delete()
+            message_error(request, 'delete_cat')
+            return render(request, 'categories.html', data)
     else:
-        cat.delete()
-        message_error(request, 'delete_cat')
-        return render(request, 'categories.html', data)
+        raise PermissionDenied()
 
+@login_required
 def update(request, id):
     item = get_object_or_404(Item, pk=id)
-    form = ItemFormEdit(instance=item)
+    wallet = item.wallet
+    if wallet.user == request.user:
+        form = ItemFormEdit(instance=item)
 
-    if(request.method == 'POST'):
-        form = ItemFormEdit(request.POST, instance=item)
+        if(request.method == 'POST'):
+            form = ItemFormEdit(request.POST, instance=item)
 
-        if (form.is_valid()):
-            item = form.save(commit=False)
-            item.original_value = item.value
-            if item.type_item == 'Receita' and item.value < 0:      # Mudar para um funcão
-                item.value = item.value * (-1)
-            elif item.type_item == 'Despesa' and item.value > 0:
-                item.value = item.value * (-1)
+            if (form.is_valid()):
+                item = form.save(commit=False)
+                item.original_value = item.value
+                if item.type_item == 'Receita' and item.value < 0:      # Mudar para um funcão
+                    item.value = item.value * (-1)
+                elif item.type_item == 'Despesa' and item.value > 0:
+                    item.value = item.value * (-1)
 
-            item.save()
-            message_sucess(request, 'edit', item.description)
+                item.save()
+                message_sucess(request, 'edit', item.description)
 
-            return redirect('/')
+                return redirect('/')
+            else:
+                return render(request, 'update.html', {'form': form, 'item': item})
         else:
             return render(request, 'update.html', {'form': form, 'item': item})
     else:
-        return render(request, 'update.html', {'form': form, 'item': item})
+        raise PermissionDenied()
 
+@login_required
 def delete(request, id):
     item = get_object_or_404(Item, pk=id)
-    item.status = False
-    item.save()
-    message_error(request,'delete')
-    
-    return redirect('/')
+    wallet = item.wallet
+    if wallet.user == request.user:
+        item.status = False
+        item.save()
+        message_error(request,'delete')
 
-def trash(request):
-    items = Item.objects.filter(status=False)
+        return redirect('/')
+    else:
+        raise PermissionDenied()
 
-    if request.method == 'GET':
-        word_key = request.GET.get('word-key')
+@login_required
+def trash(request, id):
+    wallet = get_object_or_404(Wallet, pk=id)
+    if wallet.user == request.user:
+        items = Item.objects.filter(wallet__pk=id, status=False)
 
-        init_date = request.GET.get('init-date')
-        end_date = request.GET.get('end-date')      
+        if request.method == 'GET':
+            word_key = request.GET.get('word-key')
 
-        init_value = request.GET.get('init-value')
-        end_value = request.GET.get('end-value')
+            init_date = request.GET.get('init-date')
+            end_date = request.GET.get('end-date')      
 
-        items = filter_items(request, items, word_key, init_date, end_date, init_value, end_value)
+            init_value = request.GET.get('init-value')
+            end_value = request.GET.get('end-value')
 
-    data = {'items' : items}
-    return render(request, 'trash.html', data)
+            items = filter_items(request, items, word_key, init_date, end_date, init_value, end_value)
 
+        data = {'items' : items}
+        return render(request, 'trash.html', data)
+    else:
+        raise PermissionDenied()
+
+@login_required
 def permanently_delete(request, id):
     item = get_object_or_404(Item, pk=id)
-    item.delete()
-    message_error(request, 'permanently_delete')
+    wallet = item.wallet
+    if wallet.user == request.user:
+        item.delete()
+        message_error(request, 'permanently_delete')
 
-    return redirect('/')
+        return redirect('/')
+    else:
+        raise PermissionDenied()
 
+@login_required
 def recycle(request, id):
     item = get_object_or_404(Item, pk=id)
+    wallet = item.wallet
+    if wallet.user == request.user:
 
-    item.status = True
-    item.save()
-    message_sucess(request, 'recycle', item.description)
+        item.status = True
+        item.save()
+        message_sucess(request, 'recycle', item.description)
 
-    return redirect('/')
+        return redirect('/')
+    else:
+        raise PermissionDenied()
 
+@login_required
 def pay(request, id):
     item = get_object_or_404(Item, pk=id)
+    wallet = item.wallet
+    if wallet.user == request.user:
+        item.status_payment = True
+        item.date_payment = item.date
+        item.fees = 0
+        item.save()
 
-    item.status_payment = True
-    item.date_payment = item.date
-    item.fees = 0
-    item.save()
-
-    return redirect('/')
+        return redirect('/')
+    else:
+        raise PermissionDenied()
 
 def calc_fee(items):
 
@@ -234,8 +282,6 @@ def message_sucess(request, sucess_type, name=''):
     }
 
     return messages.success(request, messages_sucess.get(sucess_type), extra_tags='safe')
-
-
 
 def message_error(request, invalid_type, name=''):
     messages_invalid = {

@@ -8,7 +8,7 @@ class DateInput(forms.DateInput):
 class WalletForm(ModelForm):
     class Meta:
         model = Wallet
-        fields = '__all__'
+        exclude = ['user']
 
 class CategoryForm(ModelForm):
     class Meta:
@@ -31,4 +31,4 @@ class ItemFormEdit(forms.ModelForm):
         exclude = ['status','original_value']
         widgets = {
             'date': forms.DateInput(attrs={'class': 'date_input'})
-        }   
+        }

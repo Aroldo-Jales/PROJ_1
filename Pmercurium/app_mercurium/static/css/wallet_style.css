@@ -17,22 +17,31 @@
 .wallet-container {
     background-color: white;
     padding: 2rem;
-    width: 20rem;
+    width: 80%;
     /* border: 1px solid gray; */
     border-radius: 0px 0px 10px 10px;
     box-shadow: 3px 3px 9px var(--sw-color);
     margin-left: 280px;
     display: flex;
-    flex-direction: column; 
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: center;
 }
 
-.wallet {
-    margin: 10px;
+.tittle {
+    width: 20%;
+}
+
+.wallet-box {
+    margin-right: 5%;
+}
+
+.wallet-btn {
     font-size: 1rem;
     font-weight: bold;
     padding: 1rem;
-    width: 100%;
-    border-radius: 10px;
+    min-width: 100%;
+    border-radius: 10px 10px 0px 10px;
     color: var(--bm-color);
     background-color: white;
     border: none;
@@ -42,7 +51,7 @@
     box-shadow: 3px 3px 9px var(--sw-color);
 }
 
-.wallet:hover {
+.wallet-btn:hover {
     transition: 0.2s;
     color: white;
     background-color: var(--bm-color);
@@ -107,4 +116,51 @@
     top: 10px;
     right: 10px;
     cursor: pointer;
+}
+
+/* Dropdown Button */
+.dropbtn {
+    background-color: var(--bm-color);
+    color: white;
+    padding: 0.5rem;
+    font-size: 16px;
+    border: none;
+}
+  
+.dropdown {
+    border: 3px solid var(--bm-color);
+    border-radius: 0px 0px 10px 10px;
+    position: relative;
+    float: right;
+    display: inline-block;
+}
+
+.dropdown-content {
+    display: none;
+    position: absolute;
+    border: 3px solid var(--bm-color);
+    background-color: white;
+    border-radius: 0px 10px 10px 10px;
+    min-width: 100px;
+    box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
+    z-index: 1;
+}
+
+.dropdown-content a {
+    color: black;
+    padding: 10px 10px; 
+    text-decoration: none;
+    display: block;
+}
+  
+.dropdown-content a:hover {
+    background-color: var(--bg-color);
+}
+
+.dropdown:hover .dropdown-content {
+    display: block;
+}
+
+.dropdown:hover .dropbtn {
+    background-color: var(--bg-blue-btn-h);
 }

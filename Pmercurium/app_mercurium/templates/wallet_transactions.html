@@ -23,7 +23,10 @@
         <a href="/categories/{{wallet.id}}">Categorias</a>
         <a href="#">Relatório</a>
         <br>
-        <a href="/trash.html">Lixeira</a>
+        <a href="/trash/{{wallet.id}}">Lixeira</a>
+        <br>
+            <a href="/accounts/logout">Sair</a>
+        <br>
     </div>
     <div class="dashboard-container">
             {% if balance.value__sum == NULL %}

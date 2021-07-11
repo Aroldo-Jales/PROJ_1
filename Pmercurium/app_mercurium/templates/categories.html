@@ -1,5 +1,4 @@
 {% load static %}
-
 <!DOCTYPE html>
 <html lang="pt-br">
 <head>
@@ -20,10 +19,17 @@
             <div class="sub-title">v 1.0</div>
         </a>
         <br>
+        {% if user.is_authenticated %}
         <a class="active" href="/categories/{{wallet.id}}">Categorias</a>
         <a href="#">Relatório</a>
         <br>
-        <a href="/trash.html">Lixeira</a>
+        <a href="/trash/{{wallet.id}}">Lixeira</a>
+        {% endif %}
+        {% if user.is_authenticated %}
+        <br>
+            <a href="/accounts/logout">Sair</a>
+        <br>
+        {% endif %}
     </div>
         <div class="content-container">
             <div class="fields-container">   

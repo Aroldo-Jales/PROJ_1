@@ -1,0 +1,34 @@
+{% load static %}
+{% load crispy_forms_tags %}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Entrar Mercurium</title>
+</head>
+<body>
+    <div class="row">
+        <div class="col-md-4 offset-md-4">
+            <div class="card auth-card">
+                <div class="card-body">
+                    <h4 class="card-title text-certer">Entrar Mercurium</h4>
+
+                    <form method="post">
+                        {% csrf_token %}
+                        <input type="hidden" name="text" value="{{ next }}">
+
+                        {{ form|crispy }}
+                        <button type="submit" class="btn btn-primary btn-block">Entrar</button>
+                    
+                    </form>
+
+                    <p class="change-form-p"> Deseja criar uma conta? <a href="/accounts/register"> Registra-se</a></p>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+</html>

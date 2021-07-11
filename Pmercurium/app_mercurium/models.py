@@ -1,9 +1,10 @@
 from django.db import models
 from django.contrib.auth.models import User
-from django.utils.text import slugify
+from django.contrib.auth import get_user_model
 
 class Wallet(models.Model):
     id = models.AutoField(primary_key=True)
+    user = models.ForeignKey(get_user_model(), on_delete=models.CASCADE)
     name = models.CharField('Nome Carteira', max_length=100)    
     limit = models.DecimalField('Valor', max_digits=8, decimal_places=2)
     
@@ -23,6 +24,10 @@ class Wallet(models.Model):
         items_list = Item.objects.filter(wallet__pk=self.id)
         items_list = items_list.filter(status=True)
         return len(items_list)
+    
+    def is_deletable(self):
+        items_list = Item.objects.filter(wallet__pk=self.id)
+        return len(items_list)
 
 class Category(models.Model):
     id = models.AutoField(primary_key=True)
@@ -32,16 +37,20 @@ class Category(models.Model):
     def __str__(self):
         return self.name
 
+        # def is_deletable(self):
+    #     related_list = []
+    #     for relation in self._meta.get_fields():
+    #         try:
+    #             related = relation.related_model.objects.filter(**{relation.field.name: self})
+    #             if related.exists():
+    #                 related_list.append(related)
+    #         except: 
+    #             pass
+    #     return related_list
+
     def is_deletable(self):
-        related_list = []
-        for relation in self._meta.get_fields():
-            try:
-                related = relation.related_model.objects.filter(**{relation.field.name: self})
-                if related.exists():
-                    related_list.append(related)
-            except: 
-                pass
-        return related_list
+        items_list = Item.objects.filter(category__pk=self.id)
+        return len(items_list)
 
 class Item(models.Model):
     id = models.AutoField(primary_key=True)
@@ -64,7 +73,7 @@ class Item(models.Model):
     date_payment = models.DateField('Data Vencimento', blank=True)
     fees = models.DecimalField('Juros', max_digits=5, decimal_places=1, blank=True)
 
-    status = models.BooleanField(default=True) # 
+    status = models.BooleanField(default=True) 
     
     def __str__(self):
         return self.description
