@@ -26,6 +26,8 @@
     flex-wrap: wrap;
     align-items: center;
     justify-content: center;
+    overflow: hidden;
+    text-overflow: ellipsis; 
 }
 
 .tittle {
@@ -33,6 +35,9 @@
 }
 
 .wallet-box {
+    overflow:hidden;
+    width: 20%;
+    margin-top: 1rem;
     margin-right: 5%;
 }
 

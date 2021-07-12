@@ -10,22 +10,21 @@
     <title>Entrar Mercurium</title>
 </head>
 <body>
-    <div class="row">
-        <div class="col-md-4 offset-md-4">
-            <div class="card auth-card">
-                <div class="card-body">
-                    <h4 class="card-title text-certer">Entrar Mercurium</h4>
+    <div class="">
+        <div class="">
+            <div class="">
+                <div class="">
+                    <h4 class="">Entrar Mercurium</h4>
 
                     <form method="post">
                         {% csrf_token %}
-                        <input type="hidden" name="text" value="{{ next }}">
-
+                        <input type="hidden" name="text" value="{{next}}">
                         {{ form|crispy }}
-                        <button type="submit" class="btn btn-primary btn-block">Entrar</button>
+                        <button type="submit" class="">Entrar</button>
                     
                     </form>
-
-                    <p class="change-form-p"> Deseja criar uma conta? <a href="/accounts/register"> Registra-se</a></p>
+                    <p class=""> Deseja criar uma conta? <a href="/accounts/register">Registrar-se</a></p>
+                    <p class=""><a href="/accounts/password_reset">Esqueci minha senha!</a></p>
                 </div>
             </div>
         </div>

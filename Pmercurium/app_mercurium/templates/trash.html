@@ -13,21 +13,16 @@
 </head>
 <body>
     <div class="sidebar">
-        <a class="logo" href="/"><img width="75" src="{% static 'img/svg/Logo_Mercurium.svg' %}">
+        <a class="logo" href="/wallet_transactions/{{wallet.id}}"><img width="75" src="{% static 'img/svg/Logo_Mercurium.svg' %}">
             <div class="title">Mercurium</div>
             <div class="sub-title">v 1.0</div>
         </a>
         <br>
         <br>
-        {% if user.is_authenticated %}
-        <a href="/trash.html">Lixeira</a>
-        {% endif %}
-
-        {% if user.is_authenticated %}
+            <a class="active" href="">Lixeira</a>
         <br>
             <a href="/accounts/logout">Sair</a>
         <br>
-        {% endif %}
     </div>
     <div class="content-container">
         <div class="table-container">
@@ -92,10 +87,10 @@
         </div>
         <div class="filter">
             <div class="container-title-filter">
-                <label class="title-form">Opções de Filtro</label>  
             </div>  
-            <form id="form-filter" method="GET">
+            <form style="margin-top: 10px" id="form-filter" method="GET">
                 <fieldset>
+                    <h2>Filtro</h2>
                     <label>Descrição:</label>
                     <input id="word-key" name="word-key" type="search">
                 </fieldset>

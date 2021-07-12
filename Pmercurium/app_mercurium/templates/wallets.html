@@ -27,6 +27,7 @@
     </div>
     <div class="wallet-container">
         <h1 style="width: 100%">Carteiras</h1>
+        <hr>
         <div style="width: 100%">
             {% for message in messages %}
                 {% if 'safe' in message.tags %}
@@ -51,6 +52,8 @@
                         Total Transações: {{wallet.transactions}}
                         <br>
                         Valor: {{wallet.transactions_value}}
+                        <br>
+                        Valor de Saída: {{wallet.left_value}}
                     </button>
                 </a>
                 <div class="dropdown">

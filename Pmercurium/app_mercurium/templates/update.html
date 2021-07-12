@@ -20,18 +20,13 @@
             <div class="sub-title">v 1.0</div>
         </a>
         <br>
-        {% if user.is_authenticated %}
-        <a href="/categories.html">Categorias</a>
+        <a href="/categories/{{wallet.id}}">Categorias</a>
         <a href="#">Relatório</a>
         <br>
-        <a href="/trash.html">Lixeira</a>
-        {% endif %}
-
-        {% if user.is_authenticated %}
+        <a href="/trash/{{wallet.id}}">Lixeira</a>
         <br>
             <a href="/accounts/logout">Sair</a>
         <br>
-        {% endif %}
     </div>
     <div class="content-container">
         <div class="form-item">

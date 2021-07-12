@@ -118,6 +118,7 @@ def create(request, id):
 @login_required
 def categories(request, id):
     wallet = get_object_or_404(Wallet, pk=id)
+
     if wallet.user == request.user:
         categories = Category.objects.filter(wallet__pk=id)
         form = CategoryForm()
@@ -184,9 +185,9 @@ def update(request, id):
 
                 return redirect('/')
             else:
-                return render(request, 'update.html', {'form': form, 'item': item})
+                return render(request, 'update.html', {'form': form, 'item': item, 'wallet' : wallet})
         else:
-            return render(request, 'update.html', {'form': form, 'item': item})
+            return render(request, 'update.html', {'form': form, 'item': item, 'wallet' : wallet})
     else:
         raise PermissionDenied()
 
@@ -220,7 +221,7 @@ def trash(request, id):
 
             items = filter_items(request, items, word_key, init_date, end_date, init_value, end_value)
 
-        data = {'items' : items}
+        data = {'items' : items , 'wallet' : wallet}
         return render(request, 'trash.html', data)
     else:
         raise PermissionDenied()

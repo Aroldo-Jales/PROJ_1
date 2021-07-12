@@ -213,7 +213,7 @@
     </div>
     <div class="charts-container">
         <div class="chart-1">
-            <canvas id="Categories"></canvas>
+            <canvas id="Balance"></canvas>
             <script type="text/javascript">
                 var ctx = document.getElementById('Categories').getContext('2d');
                 var Categories = new Chart(ctx, {
@@ -242,8 +242,41 @@
                     });
             </script>
         </div>
-    </div>
+        <div class="chart-2">
+            <canvas id="Categories"></canvas>
+            <script type="text/javascript">
+                var ctx = document.getElementById('Categories').getContext('2d');
+                var Categories = new Chart(ctx, {
+                    type: 'pie',
+                    data: {
+                        labels: [{% for cat in category %} '{{cat.name}}', {% endfor %}],
+                        datasets: [{
+                            data: [{% for cat in category %} {{cat.transaction_value}}, {% endfor %}],
+                            
+                            backgroundColor: [
+                            'rgba(255, 99, 132, 1)',
+                            'rgba(54, 162, 235, 1)',
+                            'rgba(255, 206, 86, 1)',
+                            'rgba(75, 192, 192, 1)',
+                            'rgba(153, 102, 255, 1)',
+                            'rgba(255, 159, 64, 1)'
+    
+                            ],
+                            borderColor: [
+                                'rgba(32, 57, 123, 1)'
+                                ],
+                            borderWidth: 3
+                            }]
+                        },
 
+                        options: {
+                            responsive:true,
+                            maintainAspectRatio: false,
+                        }
+                    });
+            </script>
+        </div>
+    </div>
     <footer>
     </footer>
     <script src="{% static 'js/app.js' %}"></script>

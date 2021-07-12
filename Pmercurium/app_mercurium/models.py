@@ -6,7 +6,7 @@ class Wallet(models.Model):
     id = models.AutoField(primary_key=True)
     user = models.ForeignKey(get_user_model(), on_delete=models.CASCADE)
     name = models.CharField('Nome Carteira', max_length=100)    
-    limit = models.DecimalField('Valor', max_digits=8, decimal_places=2)
+    limit = models.DecimalField('Limite', max_digits=8, decimal_places=2)
     
     def __str__(self):
         return self.name
@@ -17,6 +17,14 @@ class Wallet(models.Model):
         for item in items_list:
             total += item.value
             
+        return total
+
+    def left_value(self):
+        items_list = Item.objects.filter(wallet__pk=self.id, status=True, type_item='Despesa')
+        total = 0 
+        for item in items_list:
+            total += item.value
+
         return total
 
     def transactions(self):
@@ -47,7 +55,7 @@ class Category(models.Model):
     #     return related_list
 
     def transactions_value(self):
-        items_list = Item.objects.filter(category__pk=self.id, status=True)
+        items_list = Item.objects.filter(cat__pk=self.id, status=True)
         total = 0
         for item in items_list:
             total += item.value
