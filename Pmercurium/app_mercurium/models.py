@@ -12,8 +12,7 @@ class Wallet(models.Model):
         return self.name
 
     def transactions_value(self):
-        items_list = Item.objects.filter(wallet__pk=self.id)
-        items_list = items_list.filter(status=True)
+        items_list = Item.objects.filter(wallet__pk=self.id, status=True)
         total = 0
         for item in items_list:
             total += item.value
@@ -21,8 +20,7 @@ class Wallet(models.Model):
         return total
 
     def transactions(self):
-        items_list = Item.objects.filter(wallet__pk=self.id)
-        items_list = items_list.filter(status=True)
+        items_list = Item.objects.filter(wallet__pk=self.id, status=True)
         return len(items_list)
     
     def is_deletable(self):
@@ -48,10 +46,18 @@ class Category(models.Model):
     #             pass
     #     return related_list
 
+    def transactions_value(self):
+        items_list = Item.objects.filter(category__pk=self.id, status=True)
+        total = 0
+        for item in items_list:
+            total += item.value
+            
+        return total
+
     def is_deletable(self):
         items_list = Item.objects.filter(category__pk=self.id)
         return len(items_list)
-
+    
 class Item(models.Model):
     id = models.AutoField(primary_key=True)
     wallet = models.ForeignKey(Wallet, on_delete=models.CASCADE)
@@ -77,3 +83,15 @@ class Item(models.Model):
     
     def __str__(self):
         return self.description
+
+    def is_equal(self):
+        item = Item.objects.filter(description__iexact=self.description)
+        if Item.objects.filter(description__iexact=self.description).exists():
+            print("exist")
+            return True
+        else:
+            print("no existe")
+            return False
+        
+    
+        

@@ -20,19 +20,9 @@
             <div class="sub-title">v 1.0</div>
         </a>
         <br>
-        {% if user.is_authenticated %}
-        
-        {% else %}
         <br>
-            <a href="/accounts/login">Entrar</a>
+            <a class="logout" href="/accounts/logout">Sair</a>
         <br>
-        {% endif %}
-
-        {% if user.is_authenticated %}
-        <br>
-            <a href="/accounts/logout">Sair</a>
-        <br>
-        {% endif %}
         <br>
     </div>
     <div class="wallet-container">
