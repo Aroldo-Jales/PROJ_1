@@ -18,8 +18,6 @@
 
                     <form method="POST">
                         {% csrf_token %}
-                        <input type="" name="text" value="{{ next }}">
-
                         {{ form|crispy }}
                         <button type="" class="btn btn-primary btn-block">Registrar</button>
                     </form>
