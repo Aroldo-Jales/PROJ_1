@@ -8,5 +8,5 @@ def register(req):
         form = UserAdminCreationForm(req.POST)
         if form.is_valid():
             form.save()
-            return redirect('register')
+            return redirect('/accounts/login')
     return render(req, 'registration/register.html', {'form': form})

@@ -24,7 +24,7 @@
         <br>
         <a href="/trash/{{wallet.id}}">Lixeira</a>
         <br>
-            <a href="/accounts/logout">Sair</a>
+            <a style="margin-top: 20rem" class="active" class="logout" href="/accounts/logout">Sair</a>
         <br>
     </div>
     <div class="dashboard-container">
@@ -76,8 +76,6 @@
             <table class="main-table" id="main-table">
                 <a href="/create/{{wallet.id}}"><button class="modal-form"><img width="30" src="{% static 'img/png/plus-signal.png' %}">Adicionar</button></a>
                 <a><button class="modal-form" onclick="modal_filter()"><img width="30" src="{% static 'img/png/filled-filter.png' %}">Opções de Filtro</button></a>
-                <a><button class="modal-form"><img width="30" src="{% static 'img/png/generic-sorting.png' %}">Opções de Ordenação</button></a>
-                <!-- <button class="modal-form"><img width="30" src="{% static 'img/png/plus-signal.png' %}">Adicionar Categoria</button> -->
                     {% for message in messages %}
                         {% if 'safe' in message.tags %}
                             <div class="messages alert-sucess">
@@ -150,7 +148,7 @@
                             {% if item.status_payment == False %}
                             <td>
                                 <button class="btn_pay">
-                                    <a href="pay/{{item.id}}">
+                                    <a href="/pay/{{item.id}}">
                                         <img width="25" src="{% static 'img/svg/transaction.svg' %}">
                                     </a>
                                 </button>
@@ -210,39 +208,40 @@
             </form>
         </div>
     </div>
-    
     <div class="charts-container">
         <div class="chart-1">
-            <canvas id="Balance"></canvas>
-            <script type="text/javascript">
-                var ctx = document.getElementById('Categories').getContext('2d');
-                var Categories = new Chart(ctx, {
-                    type: 'pie',
-                    data: {
-                        labels: ['Receita', 'Despesa'],
-                        datasets: [{
-                            data: [{{gain.value__sum}},{{expenses.value__sum}}],
-                            
-                            backgroundColor: [
-                                'rgba(75, 192, 192, 1)',
-                                'rgba(255, 99, 132, 1)',    
-    
-                            ],
-                            borderColor: [
-                                'rgba(32, 57, 123, 1)'
-                                ],
-                            borderWidth: 3
-                            }]
-                        },
-
-                        options: {
-                            responsive:true,
-                            maintainAspectRatio: false,
-                        }
-                    });
-            </script>
+            <canvas id="myChart" width="400" height="400"></canvas>
+<script>
+var ctx = document.getElementById('myChart').getContext('2d');
+var myChart = new Chart(ctx, {
+    type: 'pie',
+    data: {
+        labels: ['Receita', 'Despesa'],
+        datasets: [{
+            data: [{{gain.value__sum}}, {{expenses.value__sum}}],
+            backgroundColor: [
+                'rgba(54, 162, 235, 1)',
+                'rgba(255, 99, 132, 1)',
+                'rgba(255, 206, 86, 1)',
+                'rgba(75, 192, 192, 1)',
+                'rgba(153, 102, 255, 1)',
+                'rgba(255, 159, 64, 1)'
+            ],
+            borderColor: [
+            ],
+            borderWidth: 1
+        }]
+    },
+    options: {
+        scales: {
+            y: {
+                beginAtZero: true
+            }
+        }
+    }
+});
+</script>
         </div>
-        
     </div>
     <footer>
     </footer>

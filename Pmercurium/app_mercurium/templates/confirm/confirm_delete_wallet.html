@@ -28,10 +28,11 @@
     <div class="modal-wallet-bg bg-active">
         <div class="modal">
             <h2>Deseja realmente apagar esta carteira.</h2>
-            <p><h2>{{wallet.name}}</h2></p>
+            <p><h2>Nome: {{wallet.name}}</h2></p>
+            <p><h2>Transacoes abertas na carteira: {{wallet.transactions}}</h2></p>
             <a href="/"><span class="modal-close"><img width="30" src="{% static 'img/svg/close.svg' %}"></span></a> 
-            <a href="/delete_wallet/{{wallet.id}}"><button class="btn-send-form">Confirmar</button></a>
-            <a href="/"><button class="btn-reset-form">Cancelar</button></a>
+            <a href="/delete_wallet/{{wallet.id}}"><button class="btn-confirm">Confirmar</button></a>
+            <a href="/"><button class="btn-cancel">Cancelar</button></a>
         </div>
     </div>
 </body>

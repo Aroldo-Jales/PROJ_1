@@ -21,7 +21,7 @@
         </a>
         <br>
         <br>
-            <a class="logout" href="/accounts/logout">Sair</a>
+            <a style="margin-top: 20rem" class="active" class="logout" href="/accounts/logout">Sair</a>
         <br>
         <br>
     </div>
@@ -75,7 +75,7 @@
             <form action method="POST" autocomplete="off">
                 {% csrf_token %}
                     <input id="id-wallet-name" name="name" type="text" placeholder="Nome Carteira" required> 
-                    <input id="id-wallet-limit" name="limit" type="number" placeholder="Limite Carteira">   
+                    <input id="id-wallet-limit" name="limit" type="number" placeholder="Limite Carteira" required>   
                 <div class="btns-flex">
                     <button onclick="verify_filter_form()" class="btn-send-form" type="submit">Confirmar</button>
                     <button class="btn-reset-form" type="reset">Limpar</button>

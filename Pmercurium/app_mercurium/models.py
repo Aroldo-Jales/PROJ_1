@@ -6,7 +6,7 @@ class Wallet(models.Model):
     id = models.AutoField(primary_key=True)
     user = models.ForeignKey(get_user_model(), on_delete=models.CASCADE)
     name = models.CharField('Nome Carteira', max_length=100)
-    limit = models.DecimalField('Limite', max_digits=8, decimal_places=2, default=0)
+    limit = models.DecimalField('Limite', max_digits=8, decimal_places=2)
     
     def __str__(self):
         return self.name

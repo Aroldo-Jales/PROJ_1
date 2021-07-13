@@ -24,8 +24,8 @@
     margin-left: 280px;
     display: flex;
     flex-wrap: wrap;
-    align-items: center;
-    justify-content: center;
+    align-items: left;
+    justify-content: left;
 
 }
 
@@ -121,7 +121,20 @@
     cursor: pointer;
 }
 
-/* Dropdown Button */
+.btn-cancel, .btn-confirm {
+    margin-top: 10px;
+    margin-right: 5px;
+    font-size: 1rem;
+    padding: 0.3rem 1rem;
+    border-radius: 10px;
+    background-color: var(--bm-color);
+    color: white;
+    border: none;
+    cursor: pointer;
+    line-height: 30px;
+    border: 3px solid var(--bm-color);
+    box-shadow: 3px 3px 9px var(--sw-color);
+}
 .dropbtn {
     background-color: var(--bm-color);
     color: white;
@@ -135,6 +148,7 @@
     border-radius: 0px 0px 10px 10px;
     position: relative;
     display: inline-block;
+    float: right;
 }
 
 .dropdown-content {
