@@ -5,8 +5,8 @@ from django.contrib.auth import get_user_model
 class Wallet(models.Model):
     id = models.AutoField(primary_key=True)
     user = models.ForeignKey(get_user_model(), on_delete=models.CASCADE)
-    name = models.CharField('Nome Carteira', max_length=100)    
-    limit = models.DecimalField('Limite', max_digits=8, decimal_places=2)
+    name = models.CharField('Nome Carteira', max_length=100)
+    limit = models.DecimalField('Limite', max_digits=8, decimal_places=2, default=0)
     
     def __str__(self):
         return self.name
@@ -28,8 +28,9 @@ class Wallet(models.Model):
         return total
 
     def transactions(self):
-        items_list = Item.objects.filter(wallet__pk=self.id, status=True)
+        items_list = Item.objects.filter(wallet__pk=self.id)
         return len(items_list)
+
     
     def is_deletable(self):
         items_list = Item.objects.filter(wallet__pk=self.id)
@@ -92,14 +93,6 @@ class Item(models.Model):
     def __str__(self):
         return self.description
 
-    def is_equal(self):
-        item = Item.objects.filter(description__iexact=self.description)
-        if Item.objects.filter(description__iexact=self.description).exists():
-            print("exist")
-            return True
-        else:
-            print("no existe")
-            return False
         
     
         

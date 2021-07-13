@@ -22,7 +22,6 @@
         </a>
         <br>
         <a href="/categories/{{wallet.id}}">Categorias</a>
-        <a href="#">Relatório</a>
         <br>
         <a href="/trash/{{wallet.id}}">Lixeira</a>
     </div>
@@ -32,22 +31,26 @@
             <form action="" method="POST">
                 <h2>Adicionar Registro</h2>
                 {% csrf_token %}
-                {{form.as_p}}
-                {% for message in messages %}
-                    {% if 'safe' in message.tags %}
-                        <div class="messages alert-sucess">
-                            {{message|safe}}
-                            <span onclick="close_message()" class="close-message"><img width="15" src="{% static 'img/svg/close-green.svg' %}"></span>
-                        </div>
-                    {% else %}
-                        <div onclick="close_message()" class="messages alert-danger">
-                            {{message}}
-                            <span onclick="close_message()" class="close-message"><img width="15" src="{% static 'img/svg/close.svg' %}"></span>
-                        </div>
-                    {% endif %}
-                {% endfor %}
-                <button type="submit">Confirmar</button>
-                <button type="reset">Limpar</button>
+                    <p><label for="id_description">Descrição:</label> <input type="text" name="description" maxlength="100" required id="id_description"></p>
+                    <p><label for="id_value">Valor:</label> <input type="number" name="value" step="0.01" required id="id_value"></p>
+                    <p><label for="id_type_item">Tipo:</label> <select name="type_item" required id="id_type_item">
+                    <option value="" selected>---------</option>
+                    <option value="Receita">Receita</option>
+                    <option value="Despesa">Despesa</option>
+                    </select></p>
+                    <p><label for="id_cat">Categoria:</label> <select name="cat" required id="id_cat">
+                    <option value="" selected>---------</option>
+                    {% for cat in categories %}
+                        <option value="{{cat.id}}">{{cat.name}}</option>
+                    {% endfor %}
+                    </select></p>
+                    <p><label for="id_date">Data:</label> <input type="date" name="date" required id="id_date"></p>
+                    <p><label for="id_status_payment">Pago:</label> <input type="checkbox" name="status_payment" id="id_status_payment" checked></p>
+                    <p><label for="id_date_payment">Data Vencimento:</label> <input type="date" name="date_payment" id="id_date_payment"></p>
+                    <p><label for="id_fees">Juros:</label> <input type="number" name="fees" step="0.1" id="id_fees"></p>
+                    
+                    <button type="submit">Confirmar</button>
+                    <button type="reset">Limpar</button>
             </form>
         </div>
         <script src="{% static 'js/app.js' %}"></script> 

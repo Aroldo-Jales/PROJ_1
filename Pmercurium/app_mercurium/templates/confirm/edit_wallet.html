@@ -1,0 +1,37 @@
+{% load static %}
+
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mercurium</title>
+    <link rel="stylesheet" type="text/css" href="{% static 'css/style.css' %}">
+    <link rel="stylesheet" type="text/css" href="{% static 'css/wallet_style.css' %}">
+    <link rel="preconnect" href="https://fonts.gstatic.com">
+    <link href="https://fonts.googleapis.com/css2?family=Baloo+Tammudu+2:wght@600&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Roboto&display=swap" rel="stylesheet">
+</head>
+<body>
+    <div class="sidebar">
+        <a class="logo" href="/"><img width="75" src="{% static 'img/svg/Logo_Mercurium.svg' %}">
+            <div class="title">Mercurium</div>
+            <div class="sub-title">v 1.0</div>
+        </a>
+    </div>
+    </div>
+    <div class="modal-wallet-bg bg-active">
+        <div class="modal">
+            <h2>Criar nova carteira</h2> 
+            <form action method="POST">
+                {% csrf_token %}
+                {{form.as_p}}
+                <a href="/"><span class="modal-close"><img width="30" src="{% static 'img/svg/close.svg' %}"></span></a> 
+                <button type="submit">Confirmar</button>
+                <button type="reset">Limpar</button>
+            </form>
+        </div>
+    </div>
+</body>
+</html>

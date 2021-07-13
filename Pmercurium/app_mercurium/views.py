@@ -22,11 +22,57 @@ def wallets(request):
         if form.is_valid():
             wallet = form.save(commit=False)
             wallet.user = request.user
+            if wallet.limit > 0:
+                wallet.limit = wallet.limit * (-1)
+
             wallet.save()
             message_sucess(request, 'save', wallet.name)
             return redirect('/')
     else:
         return render(request, 'wallets.html', data)
+
+def update_wallet(request, id):
+    wallet = get_object_or_404(Wallet, pk=id)
+    form = WalletForm(instance=wallet)
+
+    if wallet.user == request.user:
+        if request.method == 'POST':
+            form = WalletForm(request.POST, instance=wallet)
+
+            if form.is_valid():
+                wallet = form.save(commit=False)
+                wallet.user = request.user
+                if wallet.limit > 0:
+                    wallet.limit = wallet.limit * (-1)
+
+                wallet.save()
+                message_sucess(request, 'save', wallet.name)
+                return redirect('/')
+            else:
+                return redirect('/')
+        else:
+            return render(request, 'confirm/edit_wallet.html', {'form' : form, 'wallet' : wallet})
+    else:
+        raise PermissionDenied()
+    
+def confirm_delete_wallet(request, id):
+    wallet = get_object_or_404(Wallet, pk=id)
+    data = {'wallet' : wallet}
+    
+    if wallet.user == request.user:
+        return render(request, 'confirm/confirm_delete_wallet.html', data)
+    else:
+        raise PermissionDenied()
+
+def delete_wallet(request, id):
+    wallet = get_object_or_404(Wallet, pk=id)
+    if wallet.user == request.user:
+        wallet.delete()
+        message_error(request, 'delete_wallet', wallet.name)
+        return redirect('/')
+    else:
+        raise PermissionDenied()
+
 
 @login_required
 def wallet_transactions(request, id):
@@ -71,7 +117,6 @@ def wallet_transactions(request, id):
         'wallet' : wallet,
         'category' : category
         }
-
         return render(request, 'wallet_transactions.html', data)
     else:
         raise PermissionDenied()
@@ -79,6 +124,7 @@ def wallet_transactions(request, id):
 @login_required
 def create(request, id):
     wallet = get_object_or_404(Wallet, pk=id)
+    categories = Category.objects.filter(wallet__pk=id)
     if wallet.user == request.user:
         if request.method == 'POST':
             form = ItemForm(request.POST)
@@ -86,39 +132,71 @@ def create(request, id):
             if form.is_valid():
                 item = form.save(commit=False)
                 item.wallet = Wallet.objects.get(pk=id)
+                item = modify_item(item)
                 item.original_value = item.value
-
-                if item.type_item  == 'Despesa' and item.value > 0 or item.type_item  == 'Receita' and item.value < 0:
-                    item.value = item.value * (-1)
-                    item.original_value = item.value
-                
-                    if item.status_payment == True:
-                        item.date_payment = item.date
-                        item.fees = 0
-
+                wallet = get_object_or_404(Wallet, pk=id)
+                if over_limit(request,item, wallet):
+                    message_error(request, 'over_limit', item.description)
+                    return redirect(f'/wallet_transactions/{id}')
                 else:
-                    if item.status_payment == True:
-                        item.date_payment = item.date
-                        item.fees = 0
-
-                    else:
-                        item.original_value = item.value
-                    
-                item.save()
-                message_sucess(request, 'save', item.description)
-                
+                    item.save()
+                    message_sucess(request, 'save', item.description)
+                    return redirect(f'/wallet_transactions/{id}')
+            else:
                 return redirect(f'/wallet_transactions/{id}')
         else:
             form = ItemForm()
             form_cat = CategoryForm()
-            return render(request, 'create.html', {'form' : ItemForm, 'wallet' : wallet})
+            return render(request, 'create.html', {'wallet' : wallet, 'categories' : categories})
+    else:
+        raise PermissionDenied()
+@login_required
+def update(request, id):
+    item = get_object_or_404(Item, pk=id)
+    wallet = item.wallet
+
+    if wallet.user == request.user:
+        form = ItemFormEdit(instance=item)
+
+        if(request.method == 'POST'):
+            form = ItemFormEdit(request.POST, instance=item)
+
+            if (form.is_valid()):
+                item = form.save(commit=False)
+                item.wallet = Wallet.objects.get(pk=id)
+                item = modify_item(item)
+                item.original_value = item.value
+                wallet = get_object_or_404(Wallet, pk=id)
+                if over_limit(request,item, wallet):
+                    message_error(request, 'over_limit', item.description)
+                    return redirect(f'/wallet_transactions/{id}')
+                else:
+                    item.save()
+                    message_sucess(request, 'edit', item.description)
+                    return redirect(f'/wallet_transactions/{id}')
+            else:
+
+                return redirect(f'/wallet_transactions/{id}')
+    else:
+        raise PermissionDenied()
+
+
+@login_required
+def delete(request, id):
+    item = get_object_or_404(Item, pk=id)
+    wallet = item.wallet
+    if wallet.user == request.user:
+        item.status = False
+        item.save()
+        message_error(request,'delete')
+
+        return redirect(f'/wallet_transactions/{id}')
     else:
         raise PermissionDenied()
 
 @login_required
 def categories(request, id):
     wallet = get_object_or_404(Wallet, pk=id)
-
     if wallet.user == request.user:
         categories = Category.objects.filter(wallet__pk=id)
         form = CategoryForm()
@@ -128,12 +206,34 @@ def categories(request, id):
             form = CategoryForm(request.POST)
             
             if form.is_valid():
-                item = form.save(commit=False)
-                item.wallet = Wallet.objects.get(pk=id)
-                item.save()
-                return render(request, 'categories.html', data)
+                cat = form.save(commit=False)
+                cat.wallet = wallet
+                cat.save()
+                return redirect(f'/wallet_transactions/{id}')
         else:
             return render(request, 'categories.html', data)
+    else:
+        raise PermissionDenied()
+
+@login_required
+def update_cat(request, id):
+    cat = get_object_or_404(Category, pk=id)
+    wallet = cat.wallet
+    if wallet.user == request.user:
+        categories = Category.objects.filter(wallet__pk=id)
+        
+        form = CategoryForm(instance=cat)
+        data = {'categories' : categories, 'form' : form, 'wallet' : wallet}
+        if request.method == 'POST':
+            form = CategoryForm(request.POST, instance=cat)
+            if form.is_valid():
+                cat = form.save(commit=False)
+                cat.wallet = wallet 
+                cat.save()
+                message_sucess(request, 'edit_cat', cat.name)
+                return redirect(f'/wallet_transactions/{wallet.id}')
+        else:
+            return render(request, 'categories.html', data)    
     else:
         raise PermissionDenied()
 
@@ -147,62 +247,14 @@ def delete_cat(request, id):
         form = CategoryForm()
         data = {'categories' : categories, 'form' : form}
 
-        related_list = cat.is_deletable()
+        cat.delete()
+        message_error(request, 'delete_cat')
+        return redirect(f'/wallet_transactions/{wallet.id}')
 
-        if related_list:
-            message_error(request, 'not_delete', cat.name)
-            for item in related_list:
-                message_error(request, 'related_list')
-            return render(request, 'categories.html', data)
-
-        else:
-            cat.delete()
-            message_error(request, 'delete_cat')
-            return render(request, 'categories.html', data)
     else:
         raise PermissionDenied()
 
-@login_required
-def update(request, id):
-    item = get_object_or_404(Item, pk=id)
-    wallet = item.wallet
-    if wallet.user == request.user:
-        form = ItemFormEdit(instance=item)
 
-        if(request.method == 'POST'):
-            form = ItemFormEdit(request.POST, instance=item)
-
-            if (form.is_valid()):
-                item = form.save(commit=False)
-                item.original_value = item.value
-                if item.type_item == 'Receita' and item.value < 0:      # Mudar para um funcão
-                    item.value = item.value * (-1)
-                elif item.type_item == 'Despesa' and item.value > 0:
-                    item.value = item.value * (-1)
-
-                item.save()
-                message_sucess(request, 'edit', item.description)
-
-                return redirect('/')
-            else:
-                return render(request, 'update.html', {'form': form, 'item': item, 'wallet' : wallet})
-        else:
-            return render(request, 'update.html', {'form': form, 'item': item, 'wallet' : wallet})
-    else:
-        raise PermissionDenied()
-
-@login_required
-def delete(request, id):
-    item = get_object_or_404(Item, pk=id)
-    wallet = item.wallet
-    if wallet.user == request.user:
-        item.status = False
-        item.save()
-        message_error(request,'delete')
-
-        return redirect('/')
-    else:
-        raise PermissionDenied()
 
 @login_required
 def trash(request, id):
@@ -234,7 +286,7 @@ def permanently_delete(request, id):
         item.delete()
         message_error(request, 'permanently_delete')
 
-        return redirect('/')
+        return redirect(f'/wallet_transactions/{id}')
     else:
         raise PermissionDenied()
 
@@ -248,7 +300,7 @@ def recycle(request, id):
         item.save()
         message_sucess(request, 'recycle', item.description)
 
-        return redirect('/')
+        return redirect(f'/wallet_transactions/{id}')
     else:
         raise PermissionDenied()
 
@@ -262,7 +314,7 @@ def pay(request, id):
         item.fees = 0
         item.save()
 
-        return redirect('/')
+        return redirect(f'/wallet_transactions/{id}')
     else:
         raise PermissionDenied()
 
@@ -279,13 +331,17 @@ def message_sucess(request, sucess_type, name=''):
     messages_sucess = {
         'save': f"Registro {name} salvo!",
         'recycle' : f"Registro {name} recuperado!",
-        'edit' : f"Registro {name} alterado!"
+        'edit' : f"Registro {name} alterado!",
+        'edit_cat' : f"Categoria {name} alterada!"
     }
 
     return messages.success(request, messages_sucess.get(sucess_type), extra_tags='safe')
 
 def message_error(request, invalid_type, name=''):
     messages_invalid = {
+        'delete_cat': f"A categoria {name} foi removida.",
+        'delete_wallet': f"A carteira {name} foi removida.",
+        'over_limit': f"O registro {name} passa do valor limite da carteira.",
         'related_list': f"{name}",
         'date-range': "A data inicial é maior que a final!",
         'incomplete-date-1': "Preencha a data inicial!",

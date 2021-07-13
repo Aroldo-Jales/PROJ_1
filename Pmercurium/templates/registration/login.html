@@ -1,6 +1,5 @@
 {% load static %}
 {% load crispy_forms_tags %}
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -8,26 +7,20 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Entrar Mercurium</title>
+    <link rel="stylesheet" type="text/css" href="{% static 'css/accounts_style.css' %}">
+    <link rel="stylesheet" type="text/css" href="{% static 'css/style.css' %}">
 </head>
 <body>
-    <div class="">
-        <div class="">
-            <div class="">
-                <div class="">
-                    <h4 class="">Entrar Mercurium</h4>
-
-                    <form method="post">
-                        {% csrf_token %}
-                        <input type="hidden" name="text" value="{{next}}">
-                        {{ form|crispy }}
-                        <button type="submit" class="">Entrar</button>
-                    
-                    </form>
-                    <p class=""> Deseja criar uma conta? <a href="/accounts/register">Registrar-se</a></p>
-                    <p class=""><a href="/accounts/password_reset">Esqueci minha senha!</a></p>
-                </div>
-            </div>
-        </div>
+    <div class="form-box">
+        <h4 class="">Entrar Mercurium</h4>
+        <form method="POST">
+            {% csrf_token %}
+            <input type="hidden" name="text" value="{{next}}">
+            {{ form|crispy }}
+            <p class="forgot-password"><a href="/accounts/password_reset">Esqueci minha senha!</a></p>
+            <button type="submit" class="">Entrar</button>
+        </form>
+        <p class="modal-form"> Deseja criar uma conta? <a href="/accounts/register">Registrar-se</a></p>
     </div>
 </body>
 </html>

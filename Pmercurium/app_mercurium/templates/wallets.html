@@ -51,16 +51,16 @@
                         <br> 
                         Total Transações: {{wallet.transactions}}
                         <br>
-                        Valor: {{wallet.transactions_value}}
-                        <br>
                         Valor de Saída: {{wallet.left_value}}
+                        <br>
+                        Valor Limite: {{wallet.limit}}
                     </button>
                 </a>
                 <div class="dropdown">
                     <button class="dropbtn">Opções</button>
                     <div class="dropdown-content">
-                      <a href="#">Editar</a>
-                      <a href="#">Excluir</a>
+                      <a href="/update_wallet/{{wallet.id}}">Editar</a>
+                      <a href="/confirm_delete_wallet/{{wallet.id}}">Excluir</a>
                     </div>
                 </div>
             </div>
@@ -75,7 +75,7 @@
             <form action method="POST" autocomplete="off">
                 {% csrf_token %}
                     <input id="id-wallet-name" name="name" type="text" placeholder="Nome Carteira" required> 
-                    <input id="id-wallet-limit" name="limit" type="number" placeholder="Limite Carteira" required>   
+                    <input id="id-wallet-limit" name="limit" type="number" placeholder="Limite Carteira">   
                 <div class="btns-flex">
                     <button onclick="verify_filter_form()" class="btn-send-form" type="submit">Confirmar</button>
                     <button class="btn-reset-form" type="reset">Limpar</button>

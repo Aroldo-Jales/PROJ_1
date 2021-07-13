@@ -6,25 +6,20 @@
 <head>
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <link rel="stylesheet" type="text/css" href="{% static 'css/accounts_style.css' %}">
+    <link rel="stylesheet" type="text/css" href="{% static 'css/style.css' %}">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Registrar Mercurium</title>
 </head>
 <body>
-    <div class="">
-        <div class="">
-            <div class="">
-                <div class="">
-                    <h4 class="">Registrar Mercurium</h4>
-
-                    <form method="POST">
-                        {% csrf_token %}
-                        {{ form|crispy }}
-                        <button type="" class="btn btn-primary btn-block">Registrar</button>
-                    </form>
-                    <p class=""> Já possui uma conta? <a href="/accounts/login"> Clique aqui</a></p>
-                </div>
-            </div>
-        </div>
+    <div class="form-box2">
+        <h4 class="">Registrar Mercurium</h4>
+            <form method="POST">
+                {% csrf_token %}
+                {{ form|crispy }}
+                <button type="" class="btn btn-primary btn-block">Registrar</button>
+            </form>
+        <p class=""> Já possui uma conta? <a href="/accounts/login"> Clique aqui</a></p>
     </div>
 </body>
 </html>
