@@ -18,6 +18,8 @@ urlpatterns = [
 
     path('trash/<int:id>', trash),
     path('delete/<int:id>', delete),
+
+    path('confirm_delete_item/<int:id>', confirm_delete_item),
     path('permanentlydelete/<int:id>', permanently_delete),
     path('recycle/<int:id>', recycle),
 
