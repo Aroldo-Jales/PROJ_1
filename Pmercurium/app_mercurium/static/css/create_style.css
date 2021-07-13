@@ -38,7 +38,6 @@ body {
 
 
 .cat-table {
-    z-index: 1;
     width: 50rem;
     text-align: center;
     overflow: hidden;

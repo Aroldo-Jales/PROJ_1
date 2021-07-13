@@ -41,12 +41,12 @@ def modify_item(item):
 
     if item.type_item  == 'Despesa' and item.value > 0 or item.type_item  == 'Receita' and item.value < 0:
         item.value = item.value * (-1)
-        item.original_value = item.value
 
     if item.status_payment == True:
         item.date_payment = item.date
         item.fees = 0
-
+    
+    item.original_value = item.value
     return item
 
 def over_limit(request, item, wallet):   
@@ -58,26 +58,53 @@ def over_limit(request, item, wallet):
         value_left = 0
         for items in items_list:
             value_left += items.value
-        print('1 value_left: ', value_left)
 
         if value_left == 0:
-            print('2 wallet.limit', wallet.limit)
             if item.value < wallet.limit:
                 return True
             else:
                 return False
         else:
-            print('3 value_left: ', value_left)
-            print('3 wallet.limit: ', wallet.limit)
-            print('3 item.value: ', item.value)
             total_left = value_left + item.value
             if total_left < wallet.limit:
                 return True
             else:
                 return False
 
+def verify_item(request, item, type_=''):
+    if type_ == 'create':
+        wallet = item.wallet
+        items = Item.objects.filter(wallet__pk=wallet.id)
+        if items.filter(description__iexact=item.description):
+            message_error(request, 'invalid_name')
+            return True
+        else:
+            return False
+    else:
+        wallet = item.wallet
+        items = Item.objects.filter(wallet__pk=wallet.id)
+        if items.filter(description__iexact=item.description).exclude(pk=item.id):
+            message_error(request, 'invalid_name')
+            return True
+        else:
+            return False
+
+def wallet_limit_is_valid(request, wallet):
+    max_value = Item.objects.filter(wallet__pk=wallet.id).order_by('value')[0]
+    if max_value.status == False:
+        message_error(request, 'invalid_limit_trash', max_value.description)
+        return True
+    elif max_value.status == True:
+        message_error(request, 'invalid_limit', max_value.description)
+        return True
+    else:
+        return False
+    
 def message_error(request, invalid_type, name=''):
     messages_invalid = {
+        'invalid_limit': f"Limite inválido, pois é mais baixo que do registro {name}.",
+        'invalid_limit_trash': f"Limite inválido, pois é mais baixo que do registro {name} na lixeira.",
+        'invalid_name': "Este nome já está sendo utilizado em outro registro.",
         'over_limit': f"O registro {name} passa do valor limite da carteira.",
         'related_list': f"{name}",
         'date-range': "A data inicial é maior que a final!",

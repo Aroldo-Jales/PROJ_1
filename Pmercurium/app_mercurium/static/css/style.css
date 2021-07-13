@@ -393,6 +393,7 @@ button.modal-form:hover {
 }
 
 .charts-container {
+    display:flex;
     margin-top: 1rem;
     border-radius: 10px;
     width: 75%;
@@ -403,7 +404,7 @@ button.modal-form:hover {
     border: 3px solid var(--bm-color);
 }
 
-.chart-1 {
+.chart-1, .chart-2 {
     width: 22%;
 }
 

@@ -207,40 +207,70 @@
                 <span onclick="close_modal_filter()" class="modal-close"><img width="30" src="{% static 'img/svg/close.svg' %}"></span>
             </form>
         </div>
-    </div>
+    </div>        
     <div class="charts-container">
         <div class="chart-1">
-            <canvas id="myChart" width="400" height="400"></canvas>
-<script>
-var ctx = document.getElementById('myChart').getContext('2d');
-var myChart = new Chart(ctx, {
-    type: 'pie',
-    data: {
-        labels: ['Receita', 'Despesa'],
-        datasets: [{
-            data: [{{gain.value__sum}}, {{expenses.value__sum}}],
-            backgroundColor: [
-                'rgba(54, 162, 235, 1)',
-                'rgba(255, 99, 132, 1)',
-                'rgba(255, 206, 86, 1)',
-                'rgba(75, 192, 192, 1)',
-                'rgba(153, 102, 255, 1)',
-                'rgba(255, 159, 64, 1)'
-            ],
-            borderColor: [
-            ],
-            borderWidth: 1
-        }]
-    },
-    options: {
-        scales: {
-            y: {
-                beginAtZero: true
+        <canvas id="myChart" width="400" height="400"></canvas>
+        <script>
+        var ctx = document.getElementById('myChart').getContext('2d');
+        var myChart = new Chart(ctx, {
+            type: 'pie',
+            data: {
+                labels: ['Receita', 'Despesa'],
+                datasets: [{
+                    data: [{{gain.value__sum}}, {{expenses.value__sum}}],
+                    backgroundColor: [
+                        'rgba(54, 162, 235, 1)',
+                        'rgba(255, 99, 132, 1)',
+                        'rgba(255, 206, 86, 1)',
+                        'rgba(75, 192, 192, 1)',
+                        'rgba(153, 102, 255, 1)',
+                        'rgba(255, 159, 64, 1)'
+                    ],
+                    borderColor: [
+                        'rgb(255, 255, 255)'
+                    ],
+                    borderWidth: 1
+                }]
+            },
+            options: {
             }
-        }
-    }
-});
-</script>
+        });
+        </script>
+        </div>
+    <div class="chart-2">
+        <canvas id="myChart2" width="400" height="400"></canvas>
+        <script>
+        var ctx = document.getElementById('myChart2').getContext('2d');
+        var myChart = new Chart(ctx, {
+            type: 'doughnut',  
+            data: {
+                labels: ['Saldo Atual', 'A receber', 'A pagar', 'Saldo Projetado'],
+                datasets: [{
+                    data: [
+                        {{current_balance.value__sum}},
+                        {{to_gain.value__sum}},
+                        {{to_pay.value__sum}},
+                        {{balance.value__sum}},],
+                    backgroundColor: [
+                        'rgba(54, 162, 235, 1)',
+                        'rgba(255, 99, 132, 1)',
+                        'rgba(255, 206, 86, 1)',
+                        'rgba(75, 192, 192, 1)',
+                        'rgba(153, 102, 255, 1)',
+                        'rgba(255, 159, 64, 1)'
+                    ],
+                    borderColor: [
+                       'rgb(255, 255, 255)'
+                    ],
+                    borderWidth: 1
+                }]
+            },
+            options: {
+            
+            }
+        });
+        </script>
         </div>
     </div>
     <footer>

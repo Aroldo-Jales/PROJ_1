@@ -6,6 +6,8 @@ from django.contrib import messages
 from django.db.models import Sum
 from datetime import date
 from django.core.paginator import Paginator
+from django.http import JsonResponse
+from django.db.models import Count
 
 from .models import *
 from .forms import *
@@ -44,10 +46,12 @@ def update_wallet(request, id):
                 wallet.user = request.user
                 if wallet.limit > 0:
                     wallet.limit = wallet.limit * (-1)
-
-                wallet.save()
-                message_sucess(request, 'save', wallet.name)
-                return redirect('/')
+                if wallet_limit_is_valid(request, wallet):
+                    return redirect('/')
+                else:
+                    wallet.save()
+                    message_sucess(request, 'save', wallet.name)
+                    return redirect('/')
             else:
                 return redirect('/')
         else:
@@ -133,12 +137,12 @@ def create(request, id):
                 item = form.save(commit=False)
                 item.wallet = Wallet.objects.get(pk=id)
                 item = modify_item(item)
-                item.original_value = item.value
                 wallet = get_object_or_404(Wallet, pk=id)
-                if over_limit(request,item, wallet):
+                if over_limit(request,item, wallet) or verify_item(request, item, 'create'):
                     message_error(request, 'over_limit', item.description)
                     return redirect(f'/wallet_transactions/{wallet.id}')
                 else:
+                    item.original_value = item.value
                     item.save()
                     message_sucess(request, 'save', item.description)
                     return redirect(f'/wallet_transactions/{wallet.id}')
@@ -150,6 +154,7 @@ def create(request, id):
             return render(request, 'create.html', {'wallet' : wallet, 'categories' : categories})
     else:
         raise PermissionDenied()
+
 @login_required
 def update(request, id):
     item = get_object_or_404(Item, pk=id)
@@ -162,17 +167,15 @@ def update(request, id):
 
             if (form.is_valid()):
                 item = form.save(commit=False)
-                item.wallet = Wallet.objects.get(pk=id)
                 item = modify_item(item)
-                item.original_value = item.value
-                wallet = get_object_or_404(Wallet, pk=id)
-                if over_limit(request,item, wallet):
+                if over_limit(request,item, wallet) or verify_item(request, item):
                     message_error(request, 'over_limit', item.description)
-                    return redirect(f'/wallet_transactions/{id}')
+                    return redirect(f'/wallet_transactions/{wallet.id}')
                 else:
                     item.save()
-                    message_sucess(request, 'save', item.description)
-                    return redirect(f'/wallet_transactions/{id}')
+                    message_sucess(request, 'edit', item.description)
+
+                return redirect(f'/wallet_transactions/{wallet.id}')
             else:
                 return render(request, 'update.html', {'form': form, 'item': item})
         else:
@@ -208,6 +211,7 @@ def categories(request, id):
                 cat = form.save(commit=False)
                 cat.wallet = wallet
                 cat.save()
+                message_sucess(request, 'save_cat', cat.name)
                 return redirect(f'/wallet_transactions/{wallet.id}')
         else:
             return render(request, 'categories.html', data)
@@ -308,6 +312,7 @@ def pay(request, id):
         item.date_payment = item.date
         item.fees = 0
         item.save()
+        message_sucess(request, 'pay', item.description)
         return redirect(f'/wallet_transactions/{wallet.id}')
     else:
         raise PermissionDenied()
@@ -321,12 +326,32 @@ def calc_fee(items):
             item.value = item.original_value + (item.original_value * ((item.fees/100)*days))
             item.save()
 
+def categories_charts(request):
+    categories = Item.objects\
+        .values('category')\
+        .annotate(value=Count('category'))\
+        .order_by('category')\
+        .values('category__name', 'value')
+    data = {
+        'data': [
+            {
+                'label': item['category__name'],
+                'value': item['value'],
+            }
+            for item in categories
+        ]
+    }
+    return JsonResponse(data)
+
 def message_sucess(request, sucess_type, name=''):
     messages_sucess = {
         'save': f"Registro {name} salvo!",
+        'save_cat': f"Categoria {name} salva!",
         'recycle' : f"Registro {name} recuperado!",
         'edit' : f"Registro {name} alterado!",
-        'edit_cat' : f"Categoria {name} alterada!"
+        'edit_cat' : f"Categoria {name} alterada!",
+        'pay' : f"Registro {name} pago."
+        
     }
 
     return messages.success(request, messages_sucess.get(sucess_type), extra_tags='safe')

@@ -28,7 +28,7 @@ class ItemForm(ModelForm):
 class ItemFormEdit(forms.ModelForm):
     class Meta:
         model = Item
-        exclude = ['status','original_value']
+        exclude = ['wallet','status','original_value']
         widgets = {
             'date': forms.DateInput(attrs={'class': 'date_input'})
         }
